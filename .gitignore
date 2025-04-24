@@ -39,5 +39,20 @@ out/
 # macOS 시스템 파일 무시
 .DS_Store
 
-# .yml 파일 전체
+# 환경 설정 파일
 *.yml
+.env
+*.local
+
+# Docker
+docker-compose.override.yml
+*.log
+*.pid
+tmp/
+**/docker-data/
+
+# Jenkins
+jenkins_home/
+*.jenkins
+*.groovy
+pipeline.log
