@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        .email-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .auth-number {
+            background-color: #f0f0f0;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            border-radius: 5px;
+            letter-spacing: 3px;
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .description {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        #post {
+            text-align: center;
+        }
+
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="logo">
+        <h1>Clother</h1>
+    </div>
+    <p id="post">안녕하세요, groo 회원가입을 위한 인증 번호입니다.</p>
+    <div class="auth-number">
+        ${authNumber}
+    </div>
+    <div class="description">
+        <p>본 인증 번호는 5분간 유효합니다.</p>
+    </div>
+</div>
+</body>
+</html>
