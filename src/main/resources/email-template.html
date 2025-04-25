@@ -2,63 +2,25 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        .email-container {
-            background-color: white;
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .auth-number {
-            background-color: #f0f0f0;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            border-radius: 5px;
-            letter-spacing: 3px;
-            color: #007bff;
-            font-weight: bold;
-        }
-
-        .description {
-            text-align: center;
-            margin-top: 20px;
-            color: #666;
-        }
-
-        #post {
-            text-align: center;
-        }
-
-    </style>
 </head>
-<body>
-<div class="email-container">
-    <div class="logo">
-        <h1>Clother</h1>
+<body style="font-family: 'Arial', sans-serif; background-color: #f0f9f4; margin: 0; padding: 30px;">
+
+<div style="background-color: #ffffff; max-width: 600px; margin: 0 auto; border-radius: 20px; padding: 40px 30px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); border: 2px solid #a5d6a7; background-image: linear-gradient(145deg, #ffffff 70%, #e8f5e9);">
+    <div style="text-align: center; color: #2e7d32; margin-bottom: 25px;">
+        <h1 style="margin: 0; font-size: 30px;">🌳 그루(Groo)</h1>
+        <p style="margin: 8px 0 0; font-size: 16px; color: #66bb6a;">작은 정원 속, 당신만의 공간을 가꿔보세요.</p>
     </div>
-    <p id="post">안녕하세요, groo 회원가입을 위한 인증 번호입니다.</p>
-    <div class="auth-number">
+    <p style="text-align: center; font-size: 16px; color: #4e944f;">회원가입을 위한 인증 번호입니다 💌</p>
+    <div style="margin: 30px auto 20px; background-color: #f1f8e9; color: #1b5e20; padding: 20px 0; font-size: 32px; font-weight: bold; text-align: center; border-radius: 15px; letter-spacing: 6px; border: 3px dotted #81c784; width: 80%; position: relative;">
+        <span style="position: absolute; top: -15px; left: -15px;">🍃</span>
         ${authNumber}
+        <span style="position: absolute; bottom: -15px; right: -15px;">🌼</span>
     </div>
-    <div class="description">
-        <p>본 인증 번호는 5분간 유효합니다.</p>
+    <div style="text-align: center; margin-top: 25px; color: #558b2f; font-size: 14px;">
+        <p style="margin: 0;">⏳ 인증 번호는 <strong>5분간</strong> 유효합니다.</p>
+        <p style="margin: 5px 0 0;">만료 시 다시 요청해 주세요.</p>
     </div>
+
 </div>
 </body>
 </html>

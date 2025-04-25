@@ -43,9 +43,9 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public String joinEmail(String email) {
         makeRandomNumber();
-        String setFrom = "\"Clother Admin\" <yushiii002@gmail.com>";
+        String setFrom = "\"Groo Admin\" <x1grooservice@gmail.com>";
         String toMail = email;
-        String title = "Clother 회원 가입 인증 이메일 입니다.";
+        String title = "Groo 회원 가입 인증 이메일 입니다.";
 
         try {
             // HTML 템플릿 로드
