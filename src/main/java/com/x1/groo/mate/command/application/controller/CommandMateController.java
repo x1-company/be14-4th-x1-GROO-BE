@@ -29,7 +29,7 @@ public class CommandMateController {
         int userId = ((Number) claims.get("userId")).intValue();
 
         // 초대 링크 생성하고 결과 받기
-        String inviteCode = commandMateService.createInviteLink(userId, forestId);
+        String inviteCode = commandMateService.createInviteLink(forestId);
 
         // 초대코드를 이용해서 최종 초대링크로 감싸기
         String inviteLink = "https://localhost:8080/mate/invite/" + inviteCode;
