@@ -16,13 +16,13 @@
 
     <select id="findPieceOfMemory" resultMap="QueryForestUserItemResultMap">
         SELECT
-               ui.id,
-               ui.item_id,
-               ui.total_count,
-               ui.placed_count,
-               i.name,
-               i.category_id,
-               i.image_url
+               ui.id
+             , ui.item_id
+             , ui.total_count
+             , ui.placed_count
+             , i.name
+             , i.category_id
+             , i.image_url
           FROM user_item ui
           JOIN item i ON ui.id = i.id
          WHERE i.category_id = #{categoryId}
