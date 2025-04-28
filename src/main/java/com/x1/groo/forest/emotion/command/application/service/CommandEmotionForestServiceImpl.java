@@ -1,9 +1,14 @@
 package com.x1.groo.forest.emotion.command.application.service;
 
+import com.x1.groo.forest.emotion.command.domain.aggregate.ForestEntity;
 import com.x1.groo.forest.emotion.command.domain.aggregate.PlacementEntity;
+import com.x1.groo.forest.emotion.command.domain.aggregate.UserEntity;
 import com.x1.groo.forest.emotion.command.domain.aggregate.UserItemEntity;
+import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.PlacementRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.UserItemRepository;
+import com.x1.groo.forest.emotion.command.domain.repository.UserRepository;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +23,18 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
     private final PlacementRepository placementRepository;
     private final UserItemRepository userItemRepository;
+    private final ForestRepository forestRepository;;
+    private final UserRepository userRepository;
 
     @Autowired
-    public CommandEmotionForestServiceImpl(PlacementRepository placementRepository, UserItemRepository userItemRepository) {
+    public CommandEmotionForestServiceImpl(PlacementRepository placementRepository,
+                                           UserItemRepository userItemRepository,
+                                           ForestRepository forestRepository,
+                                           UserRepository userRepository) {
         this.placementRepository = placementRepository;
         this.userItemRepository = userItemRepository;
+        this.forestRepository = forestRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -31,12 +43,12 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         PlacementEntity placement = placementRepository.findById(placementId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 배치가 존재하지 않습니다. id=" + placementId));
 
-        if (placement.getUserId() != userId) {
+        if (placement.getUser().getId() != userId) {
             throw new IllegalArgumentException("사용자가 일치하지 않습니다.");
         }
 
-        UserItemEntity userItem = userItemRepository.findById(placement.getUserItemId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 유저 아이템이 존재하지 않습니다. id=" + placement.getUserItemId()));
+        UserItemEntity userItem = userItemRepository.findById(placement.getUserItem().getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저 아이템이 존재하지 않습니다. id=" + placement.getUserItem().getId()));
 
         userItem.decreasePlacedCount();
 
@@ -57,7 +69,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
         // 2. 관련 userItem id 모으기
         List<Integer> userItemIds = placements.stream()
-                .map(PlacementEntity::getUserItemId)
+                .map(placement -> placement.getUserItem().getId())
                 .toList();
 
         // 3. userItem 가져오기
@@ -69,7 +81,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
         // 5. placedCount 감소
         for (PlacementEntity placement : placements) {
-            UserItemEntity userItem = userItemMap.get(placement.getUserItemId());
+            UserItemEntity userItem = userItemMap.get(placement.getUserItem().getId());
             if (userItem != null) {
                 userItem.decreasePlacedCount();
             }
@@ -80,5 +92,28 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
         // 7. placement 삭제
         placementRepository.deleteAll(placements);
+    }
+
+    @Transactional
+    @Override
+    public void placeItem(int userId, RequestPlacementVO requestPlacementVO) {
+        // 1. user_item 검증 + placedCount 증가
+        UserItemEntity userItem = userItemRepository.findByIdAndUserId(requestPlacementVO.getUserItemId(), userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 아이템을 소유하고 있지 않습니다."));
+
+        userItem.incrementPlacedCount();  // placedCount += 1
+
+        // 2. forest, user 조회
+        ForestEntity forest = forestRepository.findById(requestPlacementVO.getForestId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 숲입니다."));
+
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+
+        // 3. placement 저장
+        PlacementEntity placement = new PlacementEntity(requestPlacementVO.getItemPositionX(),
+                                                        requestPlacementVO.getItemPositionY(),
+                                                        forest, user, userItem);
+        placementRepository.save(placement);
     }
 }
