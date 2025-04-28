@@ -14,14 +14,15 @@
         <result property="imageUrl" column="image_url"/>
     </resultMap>
     <resultMap id="QueryForestMailboxListResultMap"
-               type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO">
+               type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO">
         <result property="id" column="id"/>
         <result property="createdAt" column="created_at"/>
+        <result property="forestId" column="forest_id"/>
     </resultMap>
     <resultMap id="QueryForestMailboxDetailResultMap"
                type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO">
         <result property="id" column="id"/>
-        <result property="contents" column="contents"/>
+        <result property="content" column="content"/>
         <result property="createdAt" column="created_at"/>
         <result property="forestId" column="forest_id"/>
         <result property="userId" column="user_id"/>
@@ -46,23 +47,26 @@
         SELECT
                m.id
              , m.created_at
+             , m.forest_id
           FROM mailbox m
+          JOIN forest f ON m.forest_id = f.id
          WHERE m.forest_id = #{forestId}
            AND m.is_deleted = false
+           AND f.is_public = true
          ORDER BY m.created_at DESC;
     </select>
 
     <select id="findMailboxDetail" resultMap="QueryForestMailboxDetailResultMap">
         SELECT
-            m.id
-             , m.contents
+               m.id
+             , m.content
              , m.created_at
              , m.forest_id
              , m.user_id
-        FROM mailbox m
-        WHERE m.user_id = #{userId}
-          AND m.id = #{id}
-          AND m.is_deleted = false;
+          FROM mailbox m
+          JOIN forest f ON m.forest_id = f.id
+         WHERE m.id = #{id}
+           AND m.is_deleted = false
+           AND f.is_public = true;
     </select>
-
 </mapper>

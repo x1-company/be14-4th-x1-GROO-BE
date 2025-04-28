@@ -3,6 +3,7 @@ package com.x1.groo.forest.emotion.query.controller;
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
 import com.x1.groo.forest.emotion.query.service.QueryForestEmotionService;
 import io.jsonwebtoken.Claims;
@@ -26,8 +27,7 @@ public class QueryForestEmotionController {
     private final QueryForestEmotionService queryForestEmotionService;
 
     @Autowired
-    public QueryForestEmotionController(JwtUtil jwtUtil, QueryForestEmotionService queryForestEmotionService,
-                                        CommandEmotionForestService commandEmotionForestService) {
+    public QueryForestEmotionController(JwtUtil jwtUtil, QueryForestEmotionService queryForestEmotionService) {
         this.jwtUtil = jwtUtil;
         this.queryForestEmotionService = queryForestEmotionService;
     }
@@ -55,33 +55,16 @@ public class QueryForestEmotionController {
 
     // 감정의 숲에 작성된 방명록 리스트 조회
     @GetMapping("/mailbox-lists/{forestId}")
-    public ResponseEntity<List<QueryForestEmotionMailboxDTO>> getMailboxList(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
-            @PathVariable int forestId) {
-        String token = authorizationHeader.replace("Bearer", "").trim();
-        Claims claims = jwtUtil.parseJwt(token);
-        int userId = ((Number) claims.get("userId")).intValue();
+    public List<QueryForestEmotionMailboxListDTO> getMailboxList(@PathVariable int forestId) {
 
-        log.info("userId = {}", userId);
-
-        List<QueryForestEmotionMailboxDTO> mailboxList = queryForestEmotionService.getMailboxList(userId, forestId);
-
-        return ResponseEntity.ok(mailboxList);
+        return queryForestEmotionService.getMailboxList(forestId);
     }
 
 
     @GetMapping("/mailbox-detail/{id}")
-    public ResponseEntity<List<QueryForestEmotionMailboxDTO>> getMailboxDetail (
-            @RequestHeader (value = "Authorization") String authorizationHeader,
-            @PathVariable int id) {
-        String token = authorizationHeader.replace("Bearer", "").trim();
-        Claims claims = jwtUtil.parseJwt(token);
-        int userId = ((Number) claims.get("userId")).intValue();
+    public List<QueryForestEmotionMailboxDTO> getMailboxDetail(@PathVariable int id) {
 
-        log.info("userId = {}", userId);
-
-        List<QueryForestEmotionMailboxDTO> mailboxDetail = queryForestEmotionService.getMailboxDetail(userId, id);
-        return ResponseEntity.ok(mailboxDetail);
+        return queryForestEmotionService.getMailboxDetail(id);
     }
 
 }

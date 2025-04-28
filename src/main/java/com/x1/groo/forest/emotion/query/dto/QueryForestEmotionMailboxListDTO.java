@@ -8,12 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class QueryForestEmotionMailboxDTO {
-
+public class QueryForestEmotionMailboxListDTO {
     private int id;
-    private String content;
     private LocalDateTime createdAt;
     private int forestId;
-    private int userId;
-
 }
