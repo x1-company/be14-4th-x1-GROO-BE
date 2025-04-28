@@ -42,22 +42,15 @@ public class UserEntity {
 
     @Column(name = "role", nullable = false, length = 10)
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.COMMON;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at", nullable = false)
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
-
-    @Column(name = "is_suspended", nullable = false)
-    private boolean isSuspended = false;
+    @Column(name = "birth")
+    private LocalDateTime birth;
 
     @Column(name = "is_deleted", nullable = false)
     private boolean isDeleted = false;
-
-    @Column(name = "image_url", length = 255)
-    private String imageUrl;
 }

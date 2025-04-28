@@ -1,7 +1,7 @@
 package com.x1.groo.user.aggregate;
 
 public enum Role {
-    USER("USER"),
+    COMMON("COMMON"),
     ADMIN("ADMIN");
 
     private final String role;
