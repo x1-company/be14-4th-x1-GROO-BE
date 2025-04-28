@@ -9,6 +9,7 @@ import com.x1.groo.forest.emotion.command.domain.repository.PlacementRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.UserItemRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.UserRepository;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,5 +116,24 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
                                                         requestPlacementVO.getItemPositionY(),
                                                         forest, user, userItem);
         placementRepository.save(placement);
+    }
+
+    @Transactional
+    @Override
+    public void replaceItem(int userId, RequestReplacementVO requestReplacementVO) {
+        // 1. placementId로 PlacementEntity 조회
+        PlacementEntity placement = placementRepository.findById(requestReplacementVO.getPlacementId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 배치가 존재하지 않습니다. id=" + requestReplacementVO.getPlacementId()));
+
+        // 2. 권한 확인
+        if (placement.getUser().getId() != userId) {
+            throw new IllegalArgumentException("사용자가 일치하지 않습니다.");
+        }
+
+        // 3. 위치 변경
+        placement.setPositionX(requestReplacementVO.getItemPositionX());
+        placement.setPositionY(requestReplacementVO.getItemPositionY());
+
+        // 4. 저장 (save 안 해도 됨 — JPA는 @Transactional 안에서 dirty checking으로 자동 update 됨)
     }
 }
