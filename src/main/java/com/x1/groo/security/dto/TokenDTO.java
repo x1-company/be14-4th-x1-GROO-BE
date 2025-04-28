@@ -15,6 +15,5 @@ public class TokenDTO {
     private String accessToken;
     private String refreshToken;
     private Long accessTokenExpiresIn;
-    private String userProfileImageUrl;
     private String userNickname;
 }
