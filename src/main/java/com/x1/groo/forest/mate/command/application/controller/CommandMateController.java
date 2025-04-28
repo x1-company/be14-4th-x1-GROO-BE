@@ -5,6 +5,7 @@ import com.x1.groo.forest.mate.command.application.service.CommandMateService;
 import com.x1.groo.forest.mate.command.domain.vo.CreateInviteRequest;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,13 +21,9 @@ public class CommandMateController {
         this.commandMateService = commandMateService;
     }
 
+    // 초대 링크 생성
     @PostMapping("/create")
-    public CreateInviteRequest createInviteLink(@RequestHeader(value = "Authorization") String authorizationHeader,
-                                                @RequestParam int forestId) {
-        // "Bearer " 부분 제거
-        String token = authorizationHeader.replace("Bearer", "").trim();
-        Claims claims = jwtUtil.parseJwt(token);
-        int userId = ((Number) claims.get("userId")).intValue();
+    public CreateInviteRequest createInviteLink(@RequestParam int forestId) {
 
         // 초대 링크 생성하고 결과 받기
         String inviteCode = commandMateService.createInviteLink(forestId);
@@ -35,6 +32,23 @@ public class CommandMateController {
         String inviteLink = "https://localhost:8080/mate/invite/" + inviteCode;
         return new CreateInviteRequest(inviteLink);
     }
+
+    // 초대 수락
+    @PostMapping("/accept/{inviteCode}")
+    public ResponseEntity<String> acceptInvite (@RequestHeader(value = "Authorization") String authorizationHeader,
+                                                @PathVariable String inviteCode) {
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandMateService.acceptInvite(userId, inviteCode);
+
+        return ResponseEntity.ok("초대 수락 성공");
+
+
+    }
+
 
 
 }
