@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         // DTO → Entity 변환 / 엔티티의 password 컬럼에 암호화 된 값을 추가
         UserEntity newUser = modelMapper.map(signupRequestVO, UserEntity.class);
         newUser.setPassword(bCryptPasswordEncoder.encode(signupRequestVO.getPassword())); // 비밀번호 암호화
-        newUser.setRole(Role.USER);
+        newUser.setRole(Role.COMMON);
 
         userRepository.save(newUser);
         redisUtil.deleteData(signupRequestVO.getEmail());

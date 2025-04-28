@@ -45,7 +45,7 @@ public class TokenProvider {
     }
 
     // 🔹 userId를 포함하도록 변경
-    public TokenDTO generateTokenDTO(Authentication authentication, int userId, String imageUrl, String userNickname) {
+    public TokenDTO generateTokenDTO(Authentication authentication, int userId, String userNickname) {
         // 권한 가져오기
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -74,7 +74,6 @@ public class TokenProvider {
                 .accessToken(accessToken)
                 .accessTokenExpiresIn(accessTokenExpiresIn.getTime())
                 .refreshToken(refreshToken)
-                .userProfileImageUrl(imageUrl)
                 .userNickname(userNickname)
                 .build();
     }
