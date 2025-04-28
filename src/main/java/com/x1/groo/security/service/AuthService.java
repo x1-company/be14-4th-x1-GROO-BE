@@ -65,7 +65,6 @@ public class AuthService {
         TokenDTO tokenDTO = tokenProvider.generateTokenDTO(
                 authentication,
                 userEntity.getId(),
-                userEntity.getImageUrl(),
                 userEntity.getNickname());
 
         // RefreshToken 저장
@@ -83,7 +82,6 @@ public class AuthService {
                 .refreshToken(tokenDTO.getRefreshToken())
                 .accessTokenExpiresIn(tokenDTO.getAccessTokenExpiresIn())
 //                .userId(userEntity.getId())
-                .userProfileImageUrl(userEntity.getImageUrl())
                 .userNickname(userEntity.getNickname())
                 .build();
     }
@@ -115,7 +113,6 @@ public class AuthService {
         TokenDTO tokenDto = tokenProvider.generateTokenDTO(
                 authentication,
                 userEntity.getId(),
-                userEntity.getImageUrl(),
                 userEntity.getNickname());
 
         // 저장소 정보 업데이트

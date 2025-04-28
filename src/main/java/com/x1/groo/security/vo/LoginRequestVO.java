@@ -19,7 +19,7 @@ public class LoginRequestVO {
         return UserEntity.builder()
                 .email(email)
                 .password(passwordEncoder.encode(password))
-                .role(Role.USER)
+                .role(Role.COMMON)
                 .build();
     }
 
