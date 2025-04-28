@@ -3,6 +3,7 @@ package com.x1.groo.forest.mate.query.service;
 import com.x1.groo.forest.mate.query.dao.MateMapper;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -20,7 +21,7 @@ public class MateServiceImpl implements MateService {
 
         // userId가 forestId에 속하는지 확인
         if (!mateMapper.existsUserInForest(userId, forestId)) {
-            throw new IllegalArgumentException("해당 숲에 접근 권한이 없습니다.");
+            throw new AccessDeniedException("해당 숲에 대한 접근 권한이 없습니다.");
         }
 
         // 날짜 범위 생성
