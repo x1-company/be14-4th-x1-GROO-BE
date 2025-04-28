@@ -11,6 +11,6 @@ public interface QueryForestEmotionMapper {
     // 사용자가 보유한 기억의 조각 카테고리별 조회
     List<QueryForestEmotionUserItemDTO> findPieceOfMemory(
             @Param("userId") int id,
-            @Param("category") int category
+            @Param("categoryId") int category
             );
 }

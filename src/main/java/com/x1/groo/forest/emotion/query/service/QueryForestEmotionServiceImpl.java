@@ -13,7 +13,7 @@ public class QueryForestEmotionServiceImpl implements QueryForestEmotionService 
     private QueryForestEmotionMapper queryForestEmotionMapper;
 
     // 사용자가 보유한 기억의 조각 카테고리별 조회
-    public List<QueryForestEmotionUserItemDTO> getPieceOfMemory(int userId, int category) {
-        return queryForestEmotionMapper.findPieceOfMemory(userId, category);
+    public List<QueryForestEmotionUserItemDTO> getPieceOfMemory(int userId, int categoryId) {
+        return queryForestEmotionMapper.findPieceOfMemory(userId, categoryId);
     }
 }

@@ -1,4 +1,4 @@
-package com.x1.groo.forest.emotion.query.cotroller;
+package com.x1.groo.forest.emotion.query.controller;
 
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
 import com.x1.groo.forest.emotion.query.service.QueryForestEmotionService;
@@ -20,7 +20,7 @@ public class QueryForestEmotionController {
     @GetMapping("/{userId}/{category}")
     public List<QueryForestEmotionUserItemDTO> getItems(
             @PathVariable int userId,
-            @PathVariable int category) {
-        return queryForestEmotionService.getPieceOfMemory(userId, category);
+            @PathVariable int categoryId) {
+        return queryForestEmotionService.getPieceOfMemory(userId, categoryId);
     }
 }
