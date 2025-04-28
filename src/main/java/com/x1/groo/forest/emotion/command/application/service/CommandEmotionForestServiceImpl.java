@@ -27,7 +27,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
     @Transactional
     @Override
-    public void unplaceItemById(int userId, int placementId) {
+    public void retrieveItemById(int userId, int placementId) {
         PlacementEntity placement = placementRepository.findById(placementId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 배치가 존재하지 않습니다. id=" + placementId));
 
@@ -47,7 +47,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
     @Transactional
     @Override
-    public void unplaceAllItems(int userId, int forestId) {
+    public void retrieveAllItems(int userId, int forestId) {
         // 1. placement 가져오기
         List<PlacementEntity> placements = placementRepository.findByForestIdAndUserId(forestId, userId);
 

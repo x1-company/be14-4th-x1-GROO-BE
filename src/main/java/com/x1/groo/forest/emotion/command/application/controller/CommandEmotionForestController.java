@@ -24,7 +24,7 @@ public class CommandEmotionForestController {
     }
 
     @DeleteMapping("/placement")
-    public ResponseEntity<Void> unplaceItemById(@RequestHeader(value = "Authorization") String authorizationHeader,
+    public ResponseEntity<Void> retrieveItemById(@RequestHeader(value = "Authorization") String authorizationHeader,
                                                 @RequestParam int placementId) {
 
         // "Bearer " 부분 제거
@@ -32,13 +32,13 @@ public class CommandEmotionForestController {
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 
-        commandEmotionForestService.unplaceItemById(userId, placementId);
+        commandEmotionForestService.retrieveItemById(userId, placementId);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/placements")
-    public ResponseEntity<Void> unplaceAllItems(@RequestHeader(value = "Authorization") String authorizationHeader,
+    public ResponseEntity<Void> retrieveAllItems(@RequestHeader(value = "Authorization") String authorizationHeader,
                                                 @RequestParam int forestId) {
 
         // "Bearer " 부분 제거
@@ -46,7 +46,7 @@ public class CommandEmotionForestController {
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 
-        commandEmotionForestService.unplaceAllItems(userId, forestId);
+        commandEmotionForestService.retrieveAllItems(userId, forestId);
 
         return ResponseEntity.ok().build();
     }
