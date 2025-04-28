@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.x1.groo.forest.emotion.query.repository.QueryForestEmotionMapper">
+    <resultMap id="QueryForestUserItemResultMap"
+               type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO">
+        <result property="id" column="id"/>
+        <result property="totalCount" column="total_count"/>
+        <result property="placedCount" column="placed_count"/>
+        <result property="itemId" column="item_id"/>
+        <result property="itemName" column="item_name"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="imageUrl" column="image_url"/>
+    </resultMap>
+
+    <select id="findPieceOfMemory" resultMap="QueryForestUserItemResultMap">
+        SELECT
+               ui.id
+             , ui.item_id
+             , ui.total_count
+             , ui.placed_count
+             , i.name
+             , i.category_id
+             , i.image_url
+          FROM user_item ui
+          JOIN item i ON ui.id = i.id
+         WHERE i.category_id = #{categoryId}
+           AND ui.id = #{userId}
+         ORDER BY ui.id DESC;
+    </select>
+</mapper>
