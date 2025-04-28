@@ -2,6 +2,7 @@ package com.x1.groo.forest.mate.command.application.service;
 
 import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
 import com.x1.groo.forest.mate.command.domain.repository.SharedForestRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,7 @@ public class CommandMateServiceImpl implements CommandMateService {
     }
 
     // 초대 수락
+    @Transactional
     @Override
     public void acceptInvite(int userId, String inviteCode) {
 
@@ -43,7 +45,7 @@ public class CommandMateServiceImpl implements CommandMateService {
         String value = redisTemplate.opsForValue().get(redisKey);
 
         if (value == null) {
-            throw new IllegalArgumentException("유효하지 않은 초대 코드입니다.");
+            throw new IllegalArgumentException("초대코드가 만료되었거나 유효하지 않습니다.");
         }
 
         int forestId;
