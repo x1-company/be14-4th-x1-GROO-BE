@@ -1,4 +1,4 @@
-package com.x1.groo.mate.command.application.service;
+package com.x1.groo.forest.mate.command.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,7 +16,6 @@ public class CommandMateServiceImpl implements CommandMateService {
 
     @Override
     public String createInviteLink(int forestId) {
-
 
 
         // 초대 링크 생성 로직 작성

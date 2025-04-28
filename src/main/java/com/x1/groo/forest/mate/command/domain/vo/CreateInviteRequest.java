@@ -1,4 +1,4 @@
-package com.x1.groo.mate.command.domain.vo;
+package com.x1.groo.forest.mate.command.domain.vo;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
