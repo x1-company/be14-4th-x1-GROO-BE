@@ -32,11 +32,24 @@ public class CommandEmotionForestController {
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 
-        log.info("userId = {}", userId);
-
         commandEmotionForestService.unplaceItemById(userId, placementId);
 
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/placements")
+    public ResponseEntity<Void> unplaceAllItems(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                                @RequestParam int forestId) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.unplaceAllItems(userId, forestId);
+
+        return ResponseEntity.ok().build();
+    }
+
 
 }

@@ -8,6 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Service
 public class CommandEmotionForestServiceImpl implements CommandEmotionForestService {
 
@@ -38,5 +43,42 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         userItemRepository.save(userItem);
 
         placementRepository.deleteById(placementId);
+    }
+
+    @Transactional
+    @Override
+    public void unplaceAllItems(int userId, int forestId) {
+        // 1. placement 가져오기
+        List<PlacementEntity> placements = placementRepository.findByForestIdAndUserId(forestId, userId);
+
+        if (placements.isEmpty()) {
+            return; // 삭제할게 없으면 바로 리턴
+        }
+
+        // 2. 관련 userItem id 모으기
+        List<Integer> userItemIds = placements.stream()
+                .map(PlacementEntity::getUserItemId)
+                .toList();
+
+        // 3. userItem 가져오기
+        List<UserItemEntity> userItems = userItemRepository.findAllById(userItemIds);
+
+        // 4. id -> entity 매핑
+        Map<Integer, UserItemEntity> userItemMap = userItems.stream()
+                .collect(Collectors.toMap(UserItemEntity::getId, Function.identity()));
+
+        // 5. placedCount 감소
+        for (PlacementEntity placement : placements) {
+            UserItemEntity userItem = userItemMap.get(placement.getUserItemId());
+            if (userItem != null) {
+                userItem.decreasePlacedCount();
+            }
+        }
+
+        // 6. userItem을 db에 반영
+        userItemRepository.saveAll(userItemMap.values());
+
+        // 7. placement 삭제
+        placementRepository.deleteAll(placements);
     }
 }
