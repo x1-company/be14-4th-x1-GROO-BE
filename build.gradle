@@ -58,6 +58,11 @@ dependencies {
 
     // s3
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // ▶ 공식 OpenAI Java SDK
+    implementation "com.openai:openai-java:1.5.0"
+    // ▶ JSON 파싱용 Jackson
+    implementation "com.fasterxml.jackson.core:jackson-databind"
 }
 
 tasks.named('test') {
