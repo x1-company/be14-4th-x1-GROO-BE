@@ -17,7 +17,7 @@ public class QueryForestEmotionController {
     private QueryForestEmotionService queryForestEmotionService;
 
     // 사용자가 보유한 기억의 조각 카테고리별 조회
-    @GetMapping("/{userId}/{category}")
+    @GetMapping("/{userId}/{categoryId}")
     public List<QueryForestEmotionUserItemDTO> getItems(
             @PathVariable int userId,
             @PathVariable int categoryId) {

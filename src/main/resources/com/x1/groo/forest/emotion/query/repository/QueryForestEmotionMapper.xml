@@ -10,21 +10,22 @@
         <result property="placedCount" column="placed_count"/>
         <result property="itemId" column="item_id"/>
         <result property="itemName" column="item_name"/>
-        <result property="category" column="category"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="imageUrl" column="image_url"/>
     </resultMap>
 
     <select id="findPieceOfMemory" resultMap="QueryForestUserItemResultMap">
         SELECT
                ui.id,
+               ui.item_id,
                ui.total_count,
                ui.placed_count,
-               i.id,
                i.name,
-               i.category
+               i.category_id,
+               i.image_url
           FROM user_item ui
           JOIN item i ON ui.id = i.id
-          JOIN user u on ui.id = u.id
-         WHERE i.categoryId = #{categoryId}
+         WHERE i.category_id = #{categoryId}
            AND ui.id = #{userId}
          ORDER BY ui.id DESC;
     </select>

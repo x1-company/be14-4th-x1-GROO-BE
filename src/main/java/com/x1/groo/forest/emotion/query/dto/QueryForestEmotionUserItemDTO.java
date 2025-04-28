@@ -15,5 +15,5 @@ public class QueryForestEmotionUserItemDTO {
     private int itemId;
     private String itemName;
     private int categoryId;
-
+    private String imageUrl;
 }
