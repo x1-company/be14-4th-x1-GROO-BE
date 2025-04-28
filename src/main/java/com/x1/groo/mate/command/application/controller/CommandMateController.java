@@ -2,7 +2,7 @@ package com.x1.groo.mate.command.application.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.mate.command.application.service.CommandMateService;
-import com.x1.groo.mate.command.domain.aggregate.CreateInviteRequest;
+import com.x1.groo.mate.command.domain.vo.CreateInviteRequest;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
