@@ -15,7 +15,7 @@ public class CommandMateServiceImpl implements CommandMateService {
     private final StringRedisTemplate redisTemplate;
 
     @Override
-    public String createInviteLink(int placementId) {
+    public String createInviteLink(int forestId) {
 
 
 
@@ -25,10 +25,10 @@ public class CommandMateServiceImpl implements CommandMateService {
 
         // Redis에 저장
         String redisKey = "invite:" + inviteCode;
-        String inviteInfo = ":" + placementId;
+        String redisValue = String.valueOf(forestId);
 
         redisTemplate.opsForValue()
-                .set(redisKey, inviteInfo, Duration.ofHours(24));
+                .set(redisKey, redisValue, Duration.ofHours(24));
 
         return inviteCode;
     }
