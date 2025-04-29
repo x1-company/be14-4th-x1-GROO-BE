@@ -1,6 +1,7 @@
 package com.x1.groo.forest.emotion.query.dto;
 
-import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,15 +19,6 @@ public class QueryForestEmotionDetailDTO {
 
     private String backgroundImageUrl;
 
-    private int placementId;
-    private BigDecimal placementPositionX;
-    private BigDecimal placementPositionY;
-
-    private int userItemId;
-    private int userItemPlacedCount;
-
-    private int itemId;
-    private String itemName;
-    private String itemImageUrl;
+    private List<PlacementDTO> placementList = new ArrayList<>();
 
 }

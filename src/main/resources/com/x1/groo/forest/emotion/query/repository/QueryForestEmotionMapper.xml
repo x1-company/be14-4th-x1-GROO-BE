@@ -13,12 +13,14 @@
         <result property="categoryId" column="category_id"/>
         <result property="imageUrl" column="image_url"/>
     </resultMap>
+
     <resultMap id="QueryForestMailboxListResultMap"
                type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO">
         <result property="id" column="id"/>
         <result property="createdAt" column="created_at"/>
         <result property="forestId" column="forest_id"/>
     </resultMap>
+
     <resultMap id="QueryForestMailboxDetailResultMap"
                type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO">
         <result property="id" column="id"/>
@@ -27,22 +29,25 @@
         <result property="forestId" column="forest_id"/>
         <result property="userId" column="user_id"/>
     </resultMap>
+
     <resultMap id="QueryForestDetailResultMap" type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO">
         <result property="forestId" column="forest_id"/>
         <result property="name" column="forest_name"/>
         <result property="isPublic" column="is_public"/>
         <result property="backgroundId" column="background_id"/>
         <result property="userId" column="user_id"/>
-
         <result property="backgroundImageUrl" column="background_image_url"/>
+        <collection property="placementList"
+                    resultMap="com.x1.groo.forest.emotion.query.repository.QueryForestEmotionMapper.PlacementDTOMap"/>
 
+    </resultMap>
+
+    <resultMap id="PlacementDTOMap" type="com.x1.groo.forest.emotion.query.dto.PlacementDTO">
         <result property="placementId" column="placement_id"/>
-        <result property="placementPositionX" column="position_x"/>
-        <result property="placementPositionY" column="position_y"/>
-
+        <result property="placementPositionX" column="placement_position_x"/>
+        <result property="placementPositionY" column="placement_position_y"/>
         <result property="userItemId" column="user_item_id"/>
         <result property="userItemPlacedCount" column="placed_count"/>
-
         <result property="itemId" column="item_id"/>
         <result property="itemName" column="item_name"/>
         <result property="itemImageUrl" column="item_image_url"/>
@@ -98,20 +103,23 @@
              , f.background_id AS background_id
              , f.user_id
              , b.image_url AS background_image_url
+
+             , p.id AS placement_id
+             , p.position_x AS placement_position_x
+             , p.position_y AS placement_position_y
+             , ui.id AS user_item_id
+             , ui.placed_count
+
              , i.id AS item_id
              , i.name AS item_name
              , i.image_url AS item_image_url
-             , ui.id AS user_item_id
-             , ui.placed_count
-             , p.id AS placement_id
-             , p.position_x
-             , p.position_y
-          FROM forest f
-          JOIN background b ON f.background_id = b.id
-          JOIN placement p ON f.id = p.forest_id
-          JOIN user_item ui ON p.user_item_id = ui.id
-          JOIN item i ON ui.item_id = i.id
-         WHERE f.id = #{forestId}
-           AND f.is_public = true;
+        FROM forest f
+                 LEFT JOIN background b ON f.background_id = b.id
+                 LEFT JOIN placement p ON p.forest_id = f.id
+                 LEFT JOIN user_item ui ON p.user_item_id = ui.id
+                 LEFT JOIN item i ON ui.item_id = i.id
+        WHERE f.id = #{forestId}
+           AND f.is_public = true
+           AND p.id IS NOT NULL;
     </select>
 </mapper>
