@@ -4,38 +4,51 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x1.groo.forest.mate.query.dao.MateMapper">
 
-<!--	우정의 숲에서 날짜별 일기 조회 -->
-    <select id="findDiaryByDateAndForestId" resultType="com.x1.groo.forest.mate.query.dto.DiaryByDateDTO">
-		SELECT
-			   u.nickname
-		     , d.content
-		     , d.created_at AS createdAt
-		  FROM diary d
-		  JOIN user u ON d.user_id = u.id
-		  JOIN forest f ON d.forest_id = f.id
-		  LEFT JOIN shared_forest sf ON f.id = sf.id
-		 WHERE f.id = #{forestId}
-		   AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
-	</select>
+    <!-- resultMap 정의 -->
+    <resultMap id="DiaryWithEmotionResultMap" type="com.x1.groo.forest.mate.query.dto.DiaryByDateDTO">
+        <id property="diaryId" column="diary_id"/>
+        <result property="nickname" column="nickname"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="emotions" ofType="string" column="diary_id" select="findEmotionsByDiaryId"/>
+    </resultMap>
     
-    <!-- userId가 해당 forestId에 속해있는지 확인하는 쿼리 -->
+    <!-- 날짜별 일기 조회 -->
+    <select id="findDiaryByDateAndForestId" resultMap="DiaryWithEmotionResultMap">
+        SELECT DISTINCT
+              d.id AS diary_id
+            , u.nickname
+            , d.content
+            , d.created_at
+        FROM diary d
+        JOIN user u ON d.user_id = u.id
+        JOIN forest f ON d.forest_id = f.id
+        LEFT JOIN shared_forest sf ON f.id = sf.forest_id
+        WHERE f.id = #{forestId}
+          AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
+    </select>
+    
+    <!-- diary_id에 해당하는 감정 리스트 조회 -->
+    <select id="findEmotionsByDiaryId" resultType="string">
+        SELECT emotion
+        FROM diary_emotion
+        WHERE diary_id = #{diary_id}
+    </select>
+    
+    <!-- 유저의 입장 여부 확인 -->
     <select id="existsUserInForest" resultType="boolean">
-        SELECT
-			   CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
-          FROM shared_forest
-	     WHERE user_id = #{userId}
-           AND forest_id = #{forestId}
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+        FROM shared_forest
+        WHERE user_id = #{userId}
+          AND forest_id = #{forestId}
     </select>
     
-    
-    <!--	유저가 입장중인 우정의 숲 조회 -->
+    <!-- 유저가 입장중인 우정의 숲 조회 -->
     <select id="findForestsByUserId" resultType="com.x1.groo.forest.mate.query.dto.MateForestResponseDTO">
-        SELECT
-               f.id AS forestId
-			 , f.name AS forestName
-          FROM shared_forest sf
-          JOIN forest f ON sf.forest_id = f.id
-         WHERE sf.user_id = #{userId}
+        SELECT f.id AS forestId, f.name AS forestName
+        FROM shared_forest sf
+        JOIN forest f ON sf.forest_id = f.id
+        WHERE sf.user_id = #{userId}
     </select>
-	
+
 </mapper>
