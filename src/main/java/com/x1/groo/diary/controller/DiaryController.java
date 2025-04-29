@@ -1,0 +1,45 @@
+package com.x1.groo.diary.controller;
+
+import com.x1.groo.common.JwtUtil;
+import com.x1.groo.diary.dto.DiaryRequestDTO;
+import com.x1.groo.diary.service.DiaryService;
+import io.jsonwebtoken.Claims;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+/**
+ * 일기 등록 API 엔드포인트
+ * Authorization 헤더에서 JWT를 파싱하여 userId를 추출
+ */
+@RestController
+@RequestMapping("/api/diaries")
+@RequiredArgsConstructor
+public class DiaryController {
+
+    private final DiaryService diaryService;
+    private final JwtUtil jwtUtil;
+
+    @PostMapping
+    public ResponseEntity<Void> create(
+            @RequestBody DiaryRequestDTO req,
+            @RequestHeader("Authorization") String authorizationHeader
+    ) {
+        // 1) "Bearer " 제거 및 토큰 파싱
+        String token = authorizationHeader.startsWith("Bearer ")
+                ? authorizationHeader.substring(7)
+                : authorizationHeader.trim();
+
+        // 2) JWT 파싱
+        Claims claims = jwtUtil.parseJwt(token);
+
+        // 3) userId 클레임 꺼내기
+        int userId = claims.get("userId", Number.class).intValue();
+
+        // 4) 서비스 호출
+        diaryService.createDiary(req, userId);
+
+        // 5) 204 No Content 반환
+        return ResponseEntity.noContent().build();
+    }
+}

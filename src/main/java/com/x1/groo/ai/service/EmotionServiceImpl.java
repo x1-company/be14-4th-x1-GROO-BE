@@ -33,7 +33,7 @@ public class EmotionServiceImpl implements EmotionService {
             "짜증", "황사",
             "불안", "번개",
             "지침", "흐림",
-            "우울한", "안개"
+            "우울함", "안개"
     );
 
     public EmotionServiceImpl(@Value("${openai.api-key}") String apiKey) {
@@ -90,10 +90,10 @@ public class EmotionServiceImpl implements EmotionService {
     private String buildPrompt(String diary) {
         return """
             조건:
-            1. 감정 백분율 총합은 반드시 100%%여야 함.
+            1. 감정들의 값의 총합은 반드시 100이어야 함.
             2. 감정별 백분율은 절대 서로 같지 않아야 함.
             3. 같은 일기에 대해 항상 동일한 결과가 나오도록 일관성 유지.
-            4. 감정 리스트: ['즐거움','평온함','설렘','슬픔','짜증','불안','지침','우울한']
+            4. 감정 리스트: ['즐거움','평온함','설렘','슬픔','짜증','불안','지침','우울함']
             5. 값이 0이어도 반드시 포함.
             6. 출력은 순수 JSON 객체만.
 

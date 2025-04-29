@@ -6,6 +6,7 @@ import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class CommandEmotionForestServiceImpl implements CommandEmotionForestService {
@@ -135,5 +137,16 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         mailbox.setCreatedAt(LocalDateTime.now());
 
         mailboxRepository.save(mailbox);
+    }
+
+    @Transactional
+    @Override
+    public void deleteMailbox(int userId, int mailboxId, int forestId) {
+        boolean isOwner = forestRepository.existsByIdAndUserId(forestId, userId);
+        if (!isOwner) {
+            throw new IllegalArgumentException("본인의 숲에만 방명록을 삭제할 수 있습니다.");
+        }
+
+        mailboxRepository.softDeleteById(mailboxId);
     }
 }
