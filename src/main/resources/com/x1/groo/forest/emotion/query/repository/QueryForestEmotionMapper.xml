@@ -39,7 +39,6 @@
         <result property="backgroundImageUrl" column="background_image_url"/>
         <collection property="placementList"
                     resultMap="com.x1.groo.forest.emotion.query.repository.QueryForestEmotionMapper.PlacementDTOMap"/>
-
     </resultMap>
 
     <resultMap id="PlacementDTOMap" type="com.x1.groo.forest.emotion.query.dto.PlacementDTO">
