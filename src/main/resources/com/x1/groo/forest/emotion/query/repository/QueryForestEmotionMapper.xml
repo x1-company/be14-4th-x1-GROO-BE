@@ -13,6 +13,20 @@
         <result property="categoryId" column="category_id"/>
         <result property="imageUrl" column="image_url"/>
     </resultMap>
+    <resultMap id="QueryForestMailboxListResultMap"
+               type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO">
+        <result property="id" column="id"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="forestId" column="forest_id"/>
+    </resultMap>
+    <resultMap id="QueryForestMailboxDetailResultMap"
+               type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO">
+        <result property="id" column="id"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="forestId" column="forest_id"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
 
     <select id="findPieceOfMemory" resultMap="QueryForestUserItemResultMap">
         SELECT
@@ -24,9 +38,35 @@
              , i.category_id
              , i.image_url
           FROM user_item ui
-          JOIN item i ON ui.id = i.id
-         WHERE i.category_id = #{categoryId}
-           AND ui.id = #{userId}
-         ORDER BY ui.id DESC;
+          JOIN item i ON ui.item_id = i.id
+         WHERE ui.user_id = #{userId}
+           AND i.category_id = #{categoryId}
+    </select>
+
+    <select id="findMailboxList" resultMap="QueryForestMailboxListResultMap">
+        SELECT
+               m.id
+             , m.created_at
+             , m.forest_id
+          FROM mailbox m
+          JOIN forest f ON m.forest_id = f.id
+         WHERE m.forest_id = #{forestId}
+           AND m.is_deleted = false
+           AND f.is_public = true
+         ORDER BY m.created_at DESC;
+    </select>
+
+    <select id="findMailboxDetail" resultMap="QueryForestMailboxDetailResultMap">
+        SELECT
+               m.id
+             , m.content
+             , m.created_at
+             , m.forest_id
+             , m.user_id
+          FROM mailbox m
+          JOIN forest f ON m.forest_id = f.id
+         WHERE m.id = #{id}
+           AND m.is_deleted = false
+           AND f.is_public = true;
     </select>
 </mapper>
