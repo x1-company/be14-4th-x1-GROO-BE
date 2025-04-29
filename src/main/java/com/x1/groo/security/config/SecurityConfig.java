@@ -75,7 +75,7 @@ public class SecurityConfig {
                         .permitAll()
                         .requestMatchers("/auth/**", "/mails/**", "/image/**")
                         .permitAll()
-                        .requestMatchers("/items/**", "/mate/** ")
+                        .requestMatchers("/items/**")
                         .authenticated()
                         .anyRequest()
                         .authenticated()
