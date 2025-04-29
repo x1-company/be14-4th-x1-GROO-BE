@@ -29,6 +29,10 @@ public class UserItemEntity {
     @Column(name="placed_count")
     private int placedCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="forest_id")
+    private ForestEntity forest;
+
     // placed_count를 -1 하는 로직
     public void decreasePlacedCount() {
         if (this.placedCount <= 0) {
