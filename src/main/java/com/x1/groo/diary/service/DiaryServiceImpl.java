@@ -160,4 +160,23 @@ public class DiaryServiceImpl implements DiaryService {
                 diary.getCreatedAt()
         );
     }
+
+    // 임시 저장 일기 수정
+    @Override
+    @Transactional
+    public DiarySaveResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO req) {
+        Diary diary = diaryRepo.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 임시 저장입니다."));
+
+        if (diary.getUserId() != userId || diary.getIsPublished()) {
+            throw new AccessDeniedException("해당 임시 저장을 수정할 권한이 없습니다.");
+        }
+
+        // 내용만 업데이트
+        diary.setContent(req.getContent());
+        diary.setUpdatedAt(LocalDateTime.now());
+        diaryRepo.save(diary);
+
+        return new DiarySaveResponseDTO(diary.getContent());
+    }
 }
