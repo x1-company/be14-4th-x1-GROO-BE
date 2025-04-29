@@ -2,6 +2,9 @@ package com.x1.groo.diary.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.diary.dto.DiaryRequestDTO;
+import com.x1.groo.diary.dto.DiaryResponseDTO;
+import com.x1.groo.diary.dto.DiarySaveRequestDTO;
+import com.x1.groo.diary.dto.DiarySaveResponseDTO;
 import com.x1.groo.diary.service.DiaryService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,7 @@ public class DiaryController {
     private final JwtUtil jwtUtil;
 
     @PostMapping
-    public ResponseEntity<Void> create(
+    public ResponseEntity<DiaryResponseDTO> create(
             @RequestBody DiaryRequestDTO req,
             @RequestHeader("Authorization") String authorizationHeader
     ) {
@@ -36,10 +39,24 @@ public class DiaryController {
         // 3) userId 클레임 꺼내기
         int userId = claims.get("userId", Number.class).intValue();
 
-        // 4) 서비스 호출
-        diaryService.createDiary(req, userId);
+        // 4) 서비스 호출 후 DTO 반환
+        DiaryResponseDTO response = diaryService.createDiary(req, userId);
+        return ResponseEntity.ok(response);
+    }
 
-        // 5) 204 No Content 반환
-        return ResponseEntity.noContent().build();
+    /** 임시 저장 핸들러 */
+    @PostMapping("/save")
+    public ResponseEntity<DiarySaveResponseDTO> save(
+            @RequestBody DiarySaveRequestDTO req,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.startsWith("Bearer ")
+                ? authHeader.substring(7)
+                : authHeader.trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = claims.get("userId", Number.class).intValue();
+
+        DiarySaveResponseDTO response = diaryService.saveDiary(req, userId);
+        return ResponseEntity.ok(response);
     }
 }

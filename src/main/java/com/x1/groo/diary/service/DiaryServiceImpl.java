@@ -4,11 +4,13 @@ import com.x1.groo.ai.dto.EmotionRequestDTO;
 import com.x1.groo.ai.dto.EmotionResponseDTO;
 import com.x1.groo.ai.service.EmotionService;
 import com.x1.groo.diary.dto.DiaryRequestDTO;
+import com.x1.groo.diary.dto.DiaryResponseDTO;
+import com.x1.groo.diary.dto.DiarySaveRequestDTO;
+import com.x1.groo.diary.dto.DiarySaveResponseDTO;
 import com.x1.groo.diary.entity.Diary;
 import com.x1.groo.diary.entity.DiaryEmotion;
 import com.x1.groo.diary.repository.DiaryEmotionRepository;
 import com.x1.groo.diary.repository.DiaryRepository;
-import com.x1.groo.forest.emotion.command.domain.aggregate.ForestEntity;
 import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.EmotionSharedForestRepository;
 import jakarta.transaction.Transactional;
@@ -21,10 +23,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-/**
- * DiaryService 구현체
- * 일기 저장, AI 감정 분석, 상위 2개 감정 DB 저장 및 날씨 업데이트를 수행합니다.
- */
 @Service
 @RequiredArgsConstructor
 public class DiaryServiceImpl implements DiaryService {
@@ -37,47 +35,42 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     @Transactional
-    public void createDiary(DiaryRequestDTO req, int userId) {
-        // 0) 권한 체크
-        Integer forestId = req.getForestId();
+    public DiaryResponseDTO createDiary(DiaryRequestDTO req, int userId) {
+        int forestId = req.getForestId();
+        // 권한 체크
         boolean owner = forestRepo.findById(forestId)
-                .map((ForestEntity f) -> f.getUser().getId() == userId)  // ← getUser().getId() 사용
+                .map(f -> f.getUser().getId() == userId)
                 .orElse(false);
-
         boolean shared = sharedForestRepo.existsByUserIdAndForestId(userId, forestId);
-
         if (!(owner || shared)) {
             throw new AccessDeniedException(
                     String.format("사용자[%d]가 숲[%d]에 대한 쓰기 권한이 없습니다.", userId, forestId)
             );
         }
 
-
-        // 1) Diary 엔티티 생성 및 필수 값 세팅
-        Diary diary = new Diary();
-        diary.setContent(req.getContent());
-        diary.setIsPublished(req.isPublished());
-        diary.setUserId(userId);
-        diary.setForestId(req.getForestId());
-        diary.setCreatedAt(LocalDateTime.now());
-        diary.setUpdatedAt(LocalDateTime.now());
-
-        // 2) AI 감정 분석 호출
+        // AI 감정 분석
         EmotionResponseDTO aiRes = emotionService.analyzeEmotion(
                 new EmotionRequestDTO(req.getContent())
         );
-
         String mainEmotion = aiRes.getMainEmotion()
                 .trim()
                 .replaceAll("[\"\\r\\n]", "");
 
-        // 3) 날씨 세팅 (INSERT 시점에 함께 저장)
-        diary.setWeather(aiRes.getWeather());
+        // **AI가 반환한 날씨를 그대로 사용**
+        String weather = aiRes.getWeather();
 
-        // 4) Diary INSERT
-        final Diary savedDiary = diaryRepo.save(diary);
+        // Diary 저장
+        Diary diary = new Diary();
+        diary.setContent(req.getContent());
+        diary.setIsPublished(true);
+        diary.setUserId(userId);
+        diary.setForestId(forestId);
+        diary.setWeather(weather);     // 여기만 변경!
+        diary.setCreatedAt(LocalDateTime.now());
+        diary.setUpdatedAt(LocalDateTime.now());
+        Diary savedDiary = diaryRepo.save(diary);
 
-        // 5) 상위 2개 감정만 DB 저장
+        // 상위 2개 감정 추출 및 저장
         LinkedHashMap<String, Integer> top2 = aiRes.getEmotionResult().entrySet().stream()
                 .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
                 .limit(2)
@@ -87,7 +80,6 @@ public class DiaryServiceImpl implements DiaryService {
                         (oldVal, newVal) -> oldVal,
                         LinkedHashMap::new
                 ));
-
         top2.forEach((emotion, weight) -> {
             DiaryEmotion de = new DiaryEmotion();
             de.setDiary(savedDiary);
@@ -95,5 +87,43 @@ public class DiaryServiceImpl implements DiaryService {
             de.setWeight(weight);
             emotionRepo.save(de);
         });
+
+        // DTO 반환
+        return new DiaryResponseDTO(
+                savedDiary.getId(),
+                userId,
+                forestId,
+                top2,
+                mainEmotion,
+                weather,          // aiRes.getWeather() 값
+                req.getContent()
+        );
+    }
+
+    @Override
+    @Transactional
+    public DiarySaveResponseDTO saveDiary(DiarySaveRequestDTO req, int userId) {
+        int forestId = req.getForestId();
+        boolean owner = forestRepo.findById(forestId)
+                .map(f -> f.getUser().getId() == userId)
+                .orElse(false);
+        boolean shared = sharedForestRepo.existsByUserIdAndForestId(userId, forestId);
+        if (!(owner || shared)) {
+            throw new AccessDeniedException(
+                    String.format("사용자[%d]가 숲[%d]에 대한 권한이 없습니다.", userId, forestId)
+            );
+        }
+
+        // 임시 저장
+        Diary diary = new Diary();
+        diary.setContent(req.getContent());
+        diary.setIsPublished(false);
+        diary.setUserId(userId);
+        diary.setForestId(forestId);
+        diary.setCreatedAt(LocalDateTime.now());
+        diary.setUpdatedAt(LocalDateTime.now());
+        diaryRepo.save(diary);
+
+        return new DiarySaveResponseDTO(req.getContent());
     }
 }

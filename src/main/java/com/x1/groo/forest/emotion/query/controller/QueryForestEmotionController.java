@@ -2,6 +2,7 @@ package com.x1.groo.forest.emotion.query.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
@@ -32,10 +33,9 @@ public class QueryForestEmotionController {
         this.queryForestEmotionService = queryForestEmotionService;
     }
 
-    // 사용자가 보유한 기억의 조각 카테고리별 조회
     @GetMapping("/items/{categoryId}")
     public ResponseEntity<?> getItems(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable int categoryId) {
         String token = authorizationHeader.replace("Bearer", "").trim();
         Claims claims = jwtUtil.parseJwt(token);
@@ -53,6 +53,7 @@ public class QueryForestEmotionController {
         return ResponseEntity.ok(items);
     }
 
+
     // 감정의 숲에 작성된 방명록 리스트 조회
     @GetMapping("/mailbox-lists/{forestId}")
     public List<QueryForestEmotionMailboxListDTO> getMailboxList(@PathVariable int forestId) {
@@ -60,11 +61,17 @@ public class QueryForestEmotionController {
         return queryForestEmotionService.getMailboxList(forestId);
     }
 
-
+    // 감정의 숲에 작성된 방명록 상세 조회
     @GetMapping("/mailbox-detail/{id}")
     public List<QueryForestEmotionMailboxDTO> getMailboxDetail(@PathVariable int id) {
 
         return queryForestEmotionService.getMailboxDetail(id);
     }
 
+    // 감정의 숲 상세 조회
+    @GetMapping("/detail/{forestId}")
+    public List<QueryForestEmotionDetailDTO> getForestDetail(@PathVariable int forestId) {
+
+        return queryForestEmotionService.getForestDetail(forestId);
+    }
 }
