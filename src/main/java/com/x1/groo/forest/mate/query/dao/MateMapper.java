@@ -1,6 +1,7 @@
 package com.x1.groo.forest.mate.query.dao;
 
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -12,6 +13,12 @@ import java.util.List;
 public interface MateMapper {
 
     List<DiaryByDateDTO> findDiaryByDateAndForestId(
+            @Param("forestId") int forestId,
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime
+    );
+
+    List<DiaryByMonthDTO> findDiariesByMonth(
             @Param("forestId") int forestId,
             @Param("startDateTime") LocalDateTime startDateTime,
             @Param("endDateTime") LocalDateTime endDateTime

@@ -2,6 +2,7 @@ package com.x1.groo.forest.mate.query.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import com.x1.groo.forest.mate.query.service.MateServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -34,6 +35,22 @@ public class MateController {
 
         // 서비스 호출
         List<DiaryByDateDTO> diaries = mateService.findDiaries(userId, forestId, date);
+        return ResponseEntity.ok(diaries);
+    }
+
+    /* 월별 일기 조회 */
+    @GetMapping("/diary/{forestId}/month")
+    public ResponseEntity<List<DiaryByMonthDTO>> getDiariesByMonth(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int forestId,
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        List<DiaryByMonthDTO> diaries = mateService.findDiariesByMonth(userId, forestId, year, month);
         return ResponseEntity.ok(diaries);
     }
 

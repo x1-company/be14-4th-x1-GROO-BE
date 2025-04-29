@@ -2,6 +2,7 @@ package com.x1.groo.forest.mate.query.service;
 
 import com.x1.groo.forest.mate.query.dao.MateMapper;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -31,6 +32,20 @@ public class MateServiceImpl implements MateService {
 
         // 일기 리스트 조회
         return mateMapper.findDiaryByDateAndForestId(forestId, startDateTime, endDateTime);
+    }
+
+    @Override
+    public List<DiaryByMonthDTO> findDiariesByMonth(int userId, int forestId, int year, int month) {
+        if (!mateMapper.existsUserInForest(userId, forestId)) {
+            throw new AccessDeniedException("해당 숲에 대한 접근 권한이 없습니다.");
+        }
+
+        LocalDateTime startDateTime = LocalDate.of(year, month, 1).atStartOfDay();
+        LocalDateTime endDateTime = startDateTime
+                .withDayOfMonth(startDateTime.toLocalDate().lengthOfMonth())
+                .withHour(23).withMinute(59).withSecond(59);
+
+        return mateMapper.findDiariesByMonth(forestId, startDateTime, endDateTime);
     }
 
     @Override

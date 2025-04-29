@@ -28,6 +28,23 @@
            AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
     </select>
     
+    
+    <!--    월별 일기 조회 -->
+    <resultMap id="DiaryByMonthResultMap" type="com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO">
+        <id property="diaryId" column="id"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+    
+    <select id="findDiariesByMonth" resultMap="DiaryByMonthResultMap">
+        SELECT
+               d.id
+             , d.created_at
+          FROM diary d
+         WHERE d.forest_id = #{forestId}
+           AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
+    </select>
+    
+    
     <!-- diary_id에 해당하는 감정 리스트 조회 -->
     <select id="findEmotionsByDiaryId" resultType="string">
         SELECT emotion
