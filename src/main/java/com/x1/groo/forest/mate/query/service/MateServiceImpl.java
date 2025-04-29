@@ -2,8 +2,11 @@ package com.x1.groo.forest.mate.query.service;
 
 import com.x1.groo.forest.mate.query.dao.MateMapper;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
+import com.x1.groo.forest.mate.query.dto.MateForestDetailDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +14,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MateServiceImpl implements MateService {
@@ -34,8 +38,36 @@ public class MateServiceImpl implements MateService {
     }
 
     @Override
+    public List<DiaryByMonthDTO> findDiariesByMonth(int userId, int forestId, int year, int month) {
+        if (!mateMapper.existsUserInForest(userId, forestId)) {
+            throw new AccessDeniedException("해당 숲에 대한 접근 권한이 없습니다.");
+        }
+
+        LocalDateTime startDateTime = LocalDate.of(year, month, 1).atStartOfDay();
+        LocalDateTime endDateTime = startDateTime
+                .withDayOfMonth(startDateTime.toLocalDate().lengthOfMonth())
+                .withHour(23).withMinute(59).withSecond(59);
+
+        return mateMapper.findDiariesByMonth(forestId, startDateTime, endDateTime);
+    }
+
+    @Override
     public List<MateForestResponseDTO> getForestsByUserId(int userId) {
         return mateMapper.findForestsByUserId(userId);
     }
-}
 
+    @Override
+    public List<MateForestDetailDTO> getForestDetail(int forestId) {
+        List<MateForestDetailDTO> forestDetails = mateMapper.findForestDetail(forestId);
+
+        List<String> nicknames = mateMapper.findNicknamesByForestId(forestId);
+
+        log.info(nicknames.toString());
+        for (MateForestDetailDTO detail : forestDetails) {
+            detail.setNicknames(nicknames);
+        }
+
+        return forestDetails;
+    }
+
+}

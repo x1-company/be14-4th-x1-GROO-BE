@@ -16,4 +16,6 @@ public interface CommandEmotionForestService {
     void createMailbox(int userId, RequestMailboxVO requestMailboxVO);
 
     void deleteMailbox(int userId, int mailboxId, int forestId);
+
+    void updateForestPublic(int forestId, int userId);
 }

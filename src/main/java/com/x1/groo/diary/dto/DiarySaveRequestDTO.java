@@ -2,12 +2,8 @@ package com.x1.groo.diary.dto;
 
 import lombok.Data;
 
-/**
- * 일기 등록 요청 DTO
- */
 @Data
-public class DiaryRequestDTO {
+public class DiarySaveRequestDTO {
     private int forestId;
     private String content;
-    private int categoryId;
 }
