@@ -37,23 +37,9 @@ public class QueryForestEmotionController {
     public ResponseEntity<?> getItems(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable int categoryId) {
-
-        // 예외 처리 로직 추가
-        if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("로그인이 필요한 기능입니다.");
-        }
-
         String token = authorizationHeader.replace("Bearer", "").trim();
-
-        int userId;
-        try {
-            Claims claims = jwtUtil.parseJwt(token);
-            userId = ((Number) claims.get("userId")).intValue();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body("유효하지 않은 토큰입니다.");
-        }
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
 
         log.info("userId = {}", userId);
 
