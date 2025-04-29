@@ -7,9 +7,10 @@ import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -148,5 +149,20 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         }
 
         mailboxRepository.softDeleteById(mailboxId);
+    }
+
+    @Override
+    public void updateForestPublic(int forestId, int userId, boolean isPublic) {
+        ForestEntity forest = forestRepository.findById(forestId)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 숲입니다."));
+
+        // 여기서 꼭 본인 확인
+        if (forest.getUser().getId() != userId) {
+            throw new AccessDeniedException("본인 소유의 숲만 수정할 수 있습니다.");
+        }
+
+        // 본인 소유면 공개 여부 수정
+        forest.setPublic(isPublic);
+        forestRepository.save(forest);
     }
 }

@@ -4,6 +4,7 @@ import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
+import com.x1.groo.forest.emotion.command.domain.vo.UpdatePublicRequest;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -107,6 +108,21 @@ public class CommandEmotionForestController {
         int userId = ((Number) claims.get("userId")).intValue();
 
         commandEmotionForestService.deleteMailbox(userId, mailboxId, forestId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    // 숲 공개여부
+    @PatchMapping("/public/{forestId}")
+    public ResponseEntity<Void> updateForestPublic(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                   @PathVariable int forestId,
+                                   @RequestBody UpdatePublicRequest request) {
+
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.updateForestPublic(forestId, userId, request.isPublic());
 
         return ResponseEntity.ok().build();
     }
