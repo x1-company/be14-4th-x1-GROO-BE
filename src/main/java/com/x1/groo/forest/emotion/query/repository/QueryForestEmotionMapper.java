@@ -1,5 +1,6 @@
 package com.x1.groo.forest.emotion.query.repository;
 
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
@@ -22,5 +23,9 @@ public interface QueryForestEmotionMapper {
 
     List<QueryForestEmotionMailboxDTO> findMailboxDetail(
             @Param("id") int id
+    );
+
+    List<QueryForestEmotionDetailDTO> findForestDetail(
+            @Param("forestId") int forestId
     );
 }
