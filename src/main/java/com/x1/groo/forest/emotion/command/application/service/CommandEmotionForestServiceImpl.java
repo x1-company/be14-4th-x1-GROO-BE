@@ -1,24 +1,24 @@
 package com.x1.groo.forest.emotion.command.application.service;
 
-import com.x1.groo.forest.emotion.command.domain.aggregate.ForestEntity;
-import com.x1.groo.forest.emotion.command.domain.aggregate.PlacementEntity;
-import com.x1.groo.forest.emotion.command.domain.aggregate.UserEntity;
-import com.x1.groo.forest.emotion.command.domain.aggregate.UserItemEntity;
-import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
-import com.x1.groo.forest.emotion.command.domain.repository.PlacementRepository;
-import com.x1.groo.forest.emotion.command.domain.repository.UserItemRepository;
-import com.x1.groo.forest.emotion.command.domain.repository.UserRepository;
+import com.x1.groo.forest.emotion.command.domain.aggregate.*;
+import com.x1.groo.forest.emotion.command.domain.repository.*;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class CommandEmotionForestServiceImpl implements CommandEmotionForestService {
 
@@ -26,17 +26,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     private final UserItemRepository userItemRepository;
     private final ForestRepository forestRepository;;
     private final UserRepository userRepository;
-
-    @Autowired
-    public CommandEmotionForestServiceImpl(PlacementRepository placementRepository,
-                                           UserItemRepository userItemRepository,
-                                           ForestRepository forestRepository,
-                                           UserRepository userRepository) {
-        this.placementRepository = placementRepository;
-        this.userItemRepository = userItemRepository;
-        this.forestRepository = forestRepository;
-        this.userRepository = userRepository;
-    }
+    private final MailboxRepository mailboxRepository;
 
     @Transactional
     @Override
@@ -135,5 +125,28 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         placement.setPositionY(requestReplacementVO.getItemPositionY());
 
         // 4. 저장 (save 안 해도 됨 — JPA는 @Transactional 안에서 dirty checking으로 자동 update 됨)
+    }
+
+    @Override
+    public void createMailbox(int userId, RequestMailboxVO requestMailboxVO) {
+        MailboxEntity mailbox = new MailboxEntity();
+        mailbox.setContent(requestMailboxVO.getContent());
+        mailbox.setUserId(userId);
+        mailbox.setForestId(requestMailboxVO.getForestId());
+        mailbox.setIsDeleted(false);
+        mailbox.setCreatedAt(LocalDateTime.now());
+
+        mailboxRepository.save(mailbox);
+    }
+
+    @Transactional
+    @Override
+    public void deleteMailbox(int userId, int mailboxId, int forestId) {
+        boolean isOwner = forestRepository.existsByIdAndUserId(forestId, userId);
+        if (!isOwner) {
+            throw new IllegalArgumentException("본인의 숲에만 방명록을 삭제할 수 있습니다.");
+        }
+
+        mailboxRepository.softDeleteById(mailboxId);
     }
 }

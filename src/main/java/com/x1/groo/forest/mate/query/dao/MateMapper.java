@@ -1,6 +1,7 @@
 package com.x1.groo.forest.mate.query.dao;
 
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,8 +17,15 @@ public interface MateMapper {
             @Param("endDateTime") LocalDateTime endDateTime
     );
 
-    // userId가 forestId에 있는지 확인
-    boolean existsUserInForest(@Param("userId") int userId, @Param("forestId") int forestId);
+    List<MateForestResponseDTO> findForestsByUserId(
+            @Param("userId") int userId
+    );
+
+    // userId가 forestId에 있는지 확인 (숲 입장 권한 검사)
+    boolean existsUserInForest(
+            @Param("userId") int userId,
+            @Param("forestId") int forestId
+    );
 }
 
 

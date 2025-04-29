@@ -1,5 +1,6 @@
 package com.x1.groo.forest.emotion.command.application.service;
 
+import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 
@@ -11,4 +12,8 @@ public interface CommandEmotionForestService {
     void placeItem(int userId, RequestPlacementVO requestPlacementVO);
 
     void replaceItem(int userId, RequestReplacementVO requestReplacementVO);
+
+    void createMailbox(int userId, RequestMailboxVO requestMailboxVO);
+
+    void deleteMailbox(int userId, int mailboxId, int forestId);
 }
