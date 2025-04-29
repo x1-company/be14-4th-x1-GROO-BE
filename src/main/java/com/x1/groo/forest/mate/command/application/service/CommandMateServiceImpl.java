@@ -1,14 +1,22 @@
 package com.x1.groo.forest.mate.command.application.service;
 
-import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
+import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
+import com.x1.groo.forest.mate.command.domain.aggregate.MateForestEntity;
+import com.x1.groo.forest.mate.command.domain.aggregate.MateUserEntity;
 import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
+import com.x1.groo.forest.mate.command.domain.repository.BackgroundRepository;
+import com.x1.groo.forest.mate.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.mate.command.domain.repository.SharedForestRepository;
+import com.x1.groo.forest.mate.command.domain.repository.UserRepository;
+import com.x1.groo.forest.mate.command.domain.vo.CreateMateForestRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Service
@@ -20,6 +28,8 @@ public class CommandMateServiceImpl implements CommandMateService {
     private final StringRedisTemplate redisTemplate;
     private final SharedForestRepository sharedForestRepository;
     private final ForestRepository forestRepository;
+    private final UserRepository userRepository;
+    private final BackgroundRepository backgroundRepository;
 
     // 우정의 숲 탈퇴
     @Override
@@ -34,7 +44,7 @@ public class CommandMateServiceImpl implements CommandMateService {
 
         // 0명이 될 때 숲 삭제
         int memberCount = sharedForestRepository.countByForestId(userId);
-        if(memberCount == 0){
+        if (memberCount == 0) {
             forestRepository.deleteById(forestId);
         }
 
@@ -97,5 +107,31 @@ public class CommandMateServiceImpl implements CommandMateService {
         // 4. 초대코드 삭제
         redisTemplate.delete(redisKey);
 
+    }
+
+
+    @Override
+    @Transactional
+    public void createMateForest(int userId, CreateMateForestRequest request) {
+        MateUserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        BackgroundEntity background = backgroundRepository.findById(1)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경을 찾을 수 없습니다."));
+
+        MateForestEntity forest = new MateForestEntity();
+        forest.setName(request.getForestName());
+        forest.setMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        forest.setPublic(true);
+        forest.setBackground(background);
+        forest.setUser(user);
+
+        MateForestEntity savedForest = forestRepository.save(forest);
+
+        SharedForestEntity sharedForest = new SharedForestEntity();
+        sharedForest.setUserId(user.getId());
+        sharedForest.setForestId(savedForest.getId());
+
+        sharedForestRepository.save(sharedForest);
     }
 }
