@@ -5,6 +5,7 @@ import com.x1.groo.forest.emotion.command.domain.repository.*;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+@RequiredArgsConstructor
 @Service
 public class CommandEmotionForestServiceImpl implements CommandEmotionForestService {
 
@@ -23,19 +25,6 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     private final ForestRepository forestRepository;;
     private final UserRepository userRepository;
     private final MailboxRepository mailboxRepository;
-
-    @Autowired
-    public CommandEmotionForestServiceImpl(PlacementRepository placementRepository,
-                                           UserItemRepository userItemRepository,
-                                           ForestRepository forestRepository,
-                                           UserRepository userRepository,
-                                           MailboxRepository mailboxRepository) {
-        this.placementRepository = placementRepository;
-        this.userItemRepository = userItemRepository;
-        this.forestRepository = forestRepository;
-        this.userRepository = userRepository;
-        this.mailboxRepository = mailboxRepository;
-    }
 
     @Transactional
     @Override
