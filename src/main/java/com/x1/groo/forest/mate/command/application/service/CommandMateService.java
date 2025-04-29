@@ -4,4 +4,6 @@ public interface CommandMateService {
     String createInviteLink(int forestId);
 
     void acceptInvite(int userId, String inviteCode);
+
+    void quit(int userId, int forestId);
 }

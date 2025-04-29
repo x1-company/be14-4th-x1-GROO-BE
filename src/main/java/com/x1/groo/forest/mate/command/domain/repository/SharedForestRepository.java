@@ -7,4 +7,6 @@ public interface SharedForestRepository extends JpaRepository<SharedForestEntity
     boolean existsByUserIdAndForestId(int userId, int forestId);
 
     int countByForestId(int forestId);
+
+    void deleteByUserIdAndForestId(int userId, int id);
 }

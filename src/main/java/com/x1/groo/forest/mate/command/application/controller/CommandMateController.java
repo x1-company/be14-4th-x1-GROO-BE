@@ -4,12 +4,15 @@ import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.mate.command.application.service.CommandMateService;
 import com.x1.groo.forest.mate.command.domain.vo.CreateInviteRequest;
 import io.jsonwebtoken.Claims;
+import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/mate")
+@Slf4j
 public class CommandMateController {
 
     private final JwtUtil jwtUtil;
@@ -19,6 +22,19 @@ public class CommandMateController {
     public CommandMateController(JwtUtil jwtUtil, CommandMateService commandMateService) {
         this.jwtUtil = jwtUtil;
         this.commandMateService = commandMateService;
+    }
+
+    @Transactional
+    // 공유의 숲 탈퇴 및 숲 삭제(0명이 되었을 때)
+    @DeleteMapping("/quit")
+    public ResponseEntity<String> quit(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                        @RequestParam int forestId) {
+        String token = authorizationHeader.replace("Bearer ", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandMateService.quit(userId,forestId);
+        return ResponseEntity.ok("공유의 숲 탈퇴 되었습니다.");
     }
 
     // 초대 링크 생성
@@ -38,7 +54,7 @@ public class CommandMateController {
     public ResponseEntity<String> acceptInvite (@RequestHeader(value = "Authorization") String authorizationHeader,
                                                 @PathVariable String inviteCode) {
         // "Bearer " 부분 제거
-        String token = authorizationHeader.replace("Bearer", "").trim();
+        String token = authorizationHeader.replace("Bearer ", "").trim();
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 

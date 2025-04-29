@@ -1,5 +1,6 @@
 package com.x1.groo.forest.mate.command.application.service;
 
+import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
 import com.x1.groo.forest.mate.command.domain.repository.SharedForestRepository;
 import jakarta.transaction.Transactional;
@@ -14,16 +15,38 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CommandMateServiceImpl implements CommandMateService {
 
+
     // 문자열(String)로 key-value를 저장하는 간단한 템플릿
     private final StringRedisTemplate redisTemplate;
     private final SharedForestRepository sharedForestRepository;
+    private final ForestRepository forestRepository;
 
+    // 우정의 숲 탈퇴
+    @Override
+    public void quit(int userId, int forestId) {
+        boolean isMember = sharedForestRepository.existsByUserIdAndForestId(userId, forestId);
+
+        if (!isMember) {
+            throw new IllegalStateException("해당 숲에 속해있지 않습니다.");
+        }
+
+        sharedForestRepository.deleteByUserIdAndForestId(userId, forestId);
+
+        // 0명이 될 때 숲 삭제
+        int memberCount = sharedForestRepository.countByForestId(userId);
+        if(memberCount == 0){
+            forestRepository.deleteById(forestId);
+        }
+
+    }
+
+    // 초대 링크 생성
     @Override
     public String createInviteLink(int forestId) {
 
 
         // 초대 링크 생성 로직 작성
-        // 예: UUID 기반 inviteCode 생성
+        // UUID 기반 inviteCode 생성
         String inviteCode = UUID.randomUUID().toString().replace("-", "").substring(0, 8);
 
         // Redis에 저장
