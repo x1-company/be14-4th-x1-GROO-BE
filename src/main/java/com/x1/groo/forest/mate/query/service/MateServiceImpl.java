@@ -2,6 +2,7 @@ package com.x1.groo.forest.mate.query.service;
 
 import com.x1.groo.forest.mate.query.dao.MateMapper;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,11 @@ public class MateServiceImpl implements MateService {
 
         // 일기 리스트 조회
         return mateMapper.findDiaryByDateAndForestId(forestId, startDateTime, endDateTime);
+    }
+
+    @Override
+    public List<MateForestResponseDTO> getForestsByUserId(int userId) {
+        return mateMapper.findForestsByUserId(userId);
     }
 }
 
