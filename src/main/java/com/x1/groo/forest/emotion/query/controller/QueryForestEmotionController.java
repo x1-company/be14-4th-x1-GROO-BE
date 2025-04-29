@@ -33,10 +33,9 @@ public class QueryForestEmotionController {
         this.queryForestEmotionService = queryForestEmotionService;
     }
 
-    // 사용자가 보유한 기억의 조각 카테고리별 조회
     @GetMapping("/items/{categoryId}")
     public ResponseEntity<?> getItems(
-            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
             @PathVariable int categoryId) {
         String token = authorizationHeader.replace("Bearer", "").trim();
         Claims claims = jwtUtil.parseJwt(token);
@@ -53,6 +52,7 @@ public class QueryForestEmotionController {
 
         return ResponseEntity.ok(items);
     }
+
 
     // 감정의 숲에 작성된 방명록 리스트 조회
     @GetMapping("/mailbox-lists/{forestId}")
