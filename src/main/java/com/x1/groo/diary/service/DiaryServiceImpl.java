@@ -13,6 +13,8 @@ import com.x1.groo.diary.repository.DiaryEmotionRepository;
 import com.x1.groo.diary.repository.DiaryRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.EmotionSharedForestRepository;
+import com.x1.groo.item.dto.CategoryEmotionItemDTO;
+import com.x1.groo.item.service.ItemService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -32,11 +35,13 @@ public class DiaryServiceImpl implements DiaryService {
     private final EmotionService emotionService;
     private final ForestRepository forestRepo;
     private final EmotionSharedForestRepository sharedForestRepo;
+    private final ItemService itemService;
 
     @Override
     @Transactional
     public DiaryResponseDTO createDiary(DiaryRequestDTO req, int userId) {
         int forestId = req.getForestId();
+        int categoryId = req.getCategoryId();
         // 권한 체크
         boolean owner = forestRepo.findById(forestId)
                 .map(f -> f.getUser().getId() == userId)
@@ -88,6 +93,8 @@ public class DiaryServiceImpl implements DiaryService {
             emotionRepo.save(de);
         });
 
+        List<CategoryEmotionItemDTO> emotionItems = itemService.findItemsByCategoryAndEmotion(categoryId, mainEmotion);
+
         // DTO 반환
         return new DiaryResponseDTO(
                 savedDiary.getId(),
@@ -96,7 +103,8 @@ public class DiaryServiceImpl implements DiaryService {
                 top2,
                 mainEmotion,
                 weather,          // aiRes.getWeather() 값
-                req.getContent()
+                req.getContent(),
+                emotionItems
         );
     }
 

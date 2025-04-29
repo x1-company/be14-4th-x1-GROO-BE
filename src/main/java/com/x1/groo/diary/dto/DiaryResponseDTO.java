@@ -1,9 +1,11 @@
 package com.x1.groo.diary.dto;
 
+import com.x1.groo.item.dto.CategoryEmotionItemDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Map;
 
 @Data
@@ -17,4 +19,6 @@ public class DiaryResponseDTO {
     private String mainEmotion;
     private String weather;
     private String content;
+
+    private List<CategoryEmotionItemDTO> emotionItems;
 }
