@@ -103,4 +103,15 @@ public class DiaryController {
         DiarySaveUpdateResponseDTO resp = diaryService.updateSave(userId, diaryId, req);
         return ResponseEntity.ok(resp);
     }
+
+    /** 임시 저장된 일기 삭제 */
+    @DeleteMapping("/save/{diaryId}")
+    public ResponseEntity<Void> deleteSave(
+            @PathVariable int diaryId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        diaryService.deleteSave(userId, diaryId);
+        return ResponseEntity.noContent().build();
+    }
 }
