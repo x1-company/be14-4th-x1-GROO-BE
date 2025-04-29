@@ -3,10 +3,7 @@ package com.x1.groo.diary.service;
 import com.x1.groo.ai.dto.EmotionRequestDTO;
 import com.x1.groo.ai.dto.EmotionResponseDTO;
 import com.x1.groo.ai.service.EmotionService;
-import com.x1.groo.diary.dto.DiaryRequestDTO;
-import com.x1.groo.diary.dto.DiaryResponseDTO;
-import com.x1.groo.diary.dto.DiarySaveRequestDTO;
-import com.x1.groo.diary.dto.DiarySaveResponseDTO;
+import com.x1.groo.diary.dto.*;
 import com.x1.groo.diary.entity.Diary;
 import com.x1.groo.diary.entity.DiaryEmotion;
 import com.x1.groo.diary.repository.DiaryEmotionRepository;
@@ -61,7 +58,6 @@ public class DiaryServiceImpl implements DiaryService {
                 .trim()
                 .replaceAll("[\"\\r\\n]", "");
 
-        // **AI가 반환한 날씨를 그대로 사용**
         String weather = aiRes.getWeather();
 
         // Diary 저장
@@ -70,7 +66,7 @@ public class DiaryServiceImpl implements DiaryService {
         diary.setIsPublished(true);
         diary.setUserId(userId);
         diary.setForestId(forestId);
-        diary.setWeather(weather);     // 여기만 변경!
+        diary.setWeather(weather);
         diary.setCreatedAt(LocalDateTime.now());
         diary.setUpdatedAt(LocalDateTime.now());
         Diary savedDiary = diaryRepo.save(diary);
@@ -93,8 +89,10 @@ public class DiaryServiceImpl implements DiaryService {
             emotionRepo.save(de);
         });
 
-        List<CategoryEmotionItemDTO> emotionItems = itemService.findItemsByCategoryAndEmotion(categoryId, mainEmotion);
-
+        // 감정 기반 아이템 조회
+        List<CategoryEmotionItemDTO> emotionItems = 
+          itemService.findItemsByCategoryAndEmotion(categoryId, mainEmotion);
+      
         // DTO 반환
         return new DiaryResponseDTO(
                 savedDiary.getId(),
@@ -133,5 +131,17 @@ public class DiaryServiceImpl implements DiaryService {
         diaryRepo.save(diary);
 
         return new DiarySaveResponseDTO(req.getContent());
+    }
+
+    // 임시 저장 조회
+    @Override
+    @Transactional
+    public List<DiarySaveInfoDTO> getSaves(int userId) {
+        return diaryRepo.findAllByUserIdAndIsPublishedFalse(userId).stream()
+                .map(d -> new DiarySaveInfoDTO(
+                        d.getId(),
+                        d.getCreatedAt()
+                ))
+                .collect(Collectors.toList());
     }
 }
