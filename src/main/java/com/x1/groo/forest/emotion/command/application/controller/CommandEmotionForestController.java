@@ -2,6 +2,7 @@ package com.x1.groo.forest.emotion.command.application.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import io.jsonwebtoken.Claims;
@@ -77,6 +78,20 @@ public class CommandEmotionForestController {
         int userId = ((Number) claims.get("userId")).intValue();
 
         commandEmotionForestService.replaceItem(userId, requestReplacementVO);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/mailbox")
+    public ResponseEntity<Void> createMailbox (@RequestHeader(value = "Authorization") String authorizationHeader,
+                                               @RequestBody RequestMailboxVO requestMailboxVO) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.createMailbox(userId, requestMailboxVO);
 
         return ResponseEntity.ok().build();
     }

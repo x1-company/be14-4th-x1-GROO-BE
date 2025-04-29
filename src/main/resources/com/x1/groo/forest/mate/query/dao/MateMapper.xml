@@ -3,8 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.x1.groo.forest.mate.query.dao.MateMapper">
-	
-	<select id="findDiaryByDateAndForestId" resultType="com.x1.groo.forest.mate.query.dto.DiaryByDateDTO">
+
+<!--	우정의 숲에서 날짜별 일기 조회 -->
+    <select id="findDiaryByDateAndForestId" resultType="com.x1.groo.forest.mate.query.dto.DiaryByDateDTO">
 		SELECT
 			   u.nickname
 		     , d.content
@@ -17,7 +18,7 @@
 		   AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
 	</select>
     
-    <!-- 추가: userId가 해당 forestId에 속해있는지 확인하는 쿼리 -->
+    <!-- userId가 해당 forestId에 속해있는지 확인하는 쿼리 -->
     <select id="existsUserInForest" resultType="boolean">
         SELECT
 			   CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
@@ -25,5 +26,16 @@
 	     WHERE user_id = #{userId}
            AND forest_id = #{forestId}
     </select>
-
+    
+    
+    <!--	유저가 입장중인 우정의 숲 조회 -->
+    <select id="findForestsByUserId" resultType="com.x1.groo.forest.mate.query.dto.MateForestResponseDTO">
+        SELECT
+               f.id AS forestId
+			 , f.name AS forestName
+          FROM shared_forest sf
+          JOIN forest f ON sf.forest_id = f.id
+         WHERE sf.user_id = #{userId}
+    </select>
+	
 </mapper>
