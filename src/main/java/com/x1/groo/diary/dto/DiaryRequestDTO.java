@@ -9,4 +9,5 @@ import lombok.Data;
 public class DiaryRequestDTO {
     private int forestId;
     private String content;
+    private int categoryId;
 }
