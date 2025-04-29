@@ -20,16 +20,16 @@ public class QueryForestEmotionServiceImpl implements QueryForestEmotionService 
         return queryForestEmotionMapper.findPieceOfMemory(userId, categoryId);
     }
 
-    public List<QueryForestEmotionMailboxListDTO> getMailboxList (int forestId) {
-        return queryForestEmotionMapper.findMailboxList(forestId);
+    public List<QueryForestEmotionMailboxListDTO> getMailboxList (int userId, int forestId) {
+        return queryForestEmotionMapper.findMailboxList(userId, forestId);
     }
 
-    public List<QueryForestEmotionMailboxDTO> getMailboxDetail (int id) {
-        return queryForestEmotionMapper.findMailboxDetail(id);
+    public List<QueryForestEmotionMailboxDTO> getMailboxDetail (int userId, int id) {
+        return queryForestEmotionMapper.findMailboxDetail(userId, id);
     }
 
-    public List<QueryForestEmotionDetailDTO> getForestDetail(int forestId) {
-        return queryForestEmotionMapper.findForestDetail(forestId);
+    public List<QueryForestEmotionDetailDTO> getForestDetail(int userId, int forestId) {
+        return queryForestEmotionMapper.findForestDetail(userId, forestId);
     }
 
 }
