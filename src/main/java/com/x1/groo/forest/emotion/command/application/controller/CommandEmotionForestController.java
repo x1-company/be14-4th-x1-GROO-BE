@@ -4,7 +4,7 @@ import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
-import com.x1.groo.forest.emotion.command.domain.vo.UpdatePublicRequest;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestPublicVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -114,17 +114,18 @@ public class CommandEmotionForestController {
 
     // 숲 공개여부
     @PatchMapping("/public/{forestId}")
-    public ResponseEntity<Void> updateForestPublic(@RequestHeader(value = "Authorization") String authorizationHeader,
-                                   @PathVariable int forestId,
-                                   @RequestBody UpdatePublicRequest request) {
-
+    public ResponseEntity<Void> updateForestPublic(@PathVariable int forestId,
+                                                   @RequestHeader(value = "Authorization") String authorizationHeader) {
+        // "Bearer " 부분 제거
         String token = authorizationHeader.replace("Bearer", "").trim();
-        Claims claims = jwtUtil.parseJwt(token);
-        int userId = ((Number) claims.get("userId")).intValue();
+        Claims claims = jwtUtil.parseJwt(token);  // JWT 토큰 파싱
+        int userId = ((Number) claims.get("userId")).intValue();  // userId 추출
 
-        commandEmotionForestService.updateForestPublic(forestId, userId, request.isPublic());
+        // 숲 공개여부 변경 로직 실행
+        commandEmotionForestService.updateForestPublic(forestId, userId);
 
         return ResponseEntity.ok().build();
     }
+
 
 }

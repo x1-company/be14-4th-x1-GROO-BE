@@ -152,7 +152,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     }
 
     @Override
-    public void updateForestPublic(int forestId, int userId, boolean isPublic) {
+    public void updateForestPublic(int forestId, int userId) {
         ForestEntity forest = forestRepository.findById(forestId)
                 .orElseThrow(() -> new RuntimeException("존재하지 않는 숲입니다."));
 
@@ -161,8 +161,11 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
             throw new AccessDeniedException("본인 소유의 숲만 수정할 수 있습니다.");
         }
 
-        // 본인 소유면 공개 여부 수정
-        forest.setPublic(isPublic);
+        // 숲의 공개 여부 토글 (true -> false, false -> true)
+        boolean currentPublicStatus = forest.isPublic();
+        forest.setPublic(!currentPublicStatus);
+
+        // 숲 정보 저장
         forestRepository.save(forest);
     }
 }
