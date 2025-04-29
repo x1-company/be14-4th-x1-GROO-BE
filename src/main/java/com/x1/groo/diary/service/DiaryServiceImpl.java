@@ -8,18 +8,18 @@ import com.x1.groo.diary.entity.Diary;
 import com.x1.groo.diary.entity.DiaryEmotion;
 import com.x1.groo.diary.repository.DiaryEmotionRepository;
 import com.x1.groo.diary.repository.DiaryRepository;
-import com.x1.groo.security.util.SecurityUtil;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  * DiaryService 구현체
- * 일기 등록 + AI 감정 분석 + DB 저장 로직을 수행
+ * 일기 저장, AI 감정 분석, 상위 2개 감정 DB 저장 및 날씨 업데이트를 수행합니다.
  */
 @Service
 @RequiredArgsConstructor
@@ -31,24 +31,33 @@ public class DiaryServiceImpl implements DiaryService {
 
     @Override
     @Transactional
-    public void createDiary(DiaryRequestDTO req) {
-        // 1) 로그인된 사용자 ID 추출
-        Long userId = SecurityUtil.getCurrentMemberId();
+    public void createDiary(DiaryRequestDTO req, Long userId) {
+        // 1) Diary 엔티티 생성 및 필수 값 세팅
+        Diary diary = new Diary();
+        diary.setContent(req.getContent());
+        diary.setIsPublished(req.isPublished());
+        diary.setUserId(userId);
+        diary.setForestId(req.getForestId());
+        diary.setCreatedAt(LocalDateTime.now());
+        diary.setUpdatedAt(LocalDateTime.now());
 
-        // 2) Diary 저장 (새 final 변수에 담기)
-        Diary diaryEntity = new Diary();
-        diaryEntity.setContent(req.getContent());
-        diaryEntity.setIsPublished(req.isPublished());
-        diaryEntity.setUserId(userId);
-        diaryEntity.setForestId(req.getForestId());
-        final Diary savedDiary = diaryRepo.save(diaryEntity);
-
-        // 3) AI 감정 분석 호출
+        // 2) AI 감정 분석 호출
         EmotionResponseDTO aiRes = emotionService.analyzeEmotion(
                 new EmotionRequestDTO(req.getContent())
         );
 
-        // 4) 상위 2개 감정만 DB 저장
+        String mainEmotion = aiRes.getMainEmotion();
+        mainEmotion = mainEmotion
+                .trim()
+                .replaceAll("[\"\\r\\n]", "");
+
+        // 3) 날씨 세팅 (INSERT 시점에 함께 저장)
+        diary.setWeather(aiRes.getWeather());
+
+        // 4) Diary INSERT
+        final Diary savedDiary = diaryRepo.save(diary);
+
+        // 5) 상위 2개 감정만 DB 저장
         LinkedHashMap<String, Integer> top2 = aiRes.getEmotionResult().entrySet().stream()
                 .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
                 .limit(2)
@@ -59,7 +68,6 @@ public class DiaryServiceImpl implements DiaryService {
                         LinkedHashMap::new
                 ));
 
-        // 람다 내에서는 final 변수인 savedDiary 사용
         top2.forEach((emotion, weight) -> {
             DiaryEmotion de = new DiaryEmotion();
             de.setDiary(savedDiary);
@@ -67,9 +75,5 @@ public class DiaryServiceImpl implements DiaryService {
             de.setWeight(weight);
             emotionRepo.save(de);
         });
-
-        // 5) 날씨 업데이트
-        savedDiary.setWeather(aiRes.getWeather());
-        diaryRepo.save(savedDiary);
     }
 }
