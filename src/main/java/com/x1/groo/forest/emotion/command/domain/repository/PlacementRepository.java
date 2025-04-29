@@ -9,6 +9,4 @@ import java.util.List;
 @Repository
 public interface PlacementRepository extends JpaRepository<PlacementEntity, Integer> {
     void deleteByUserItemIdIn(List<Integer> userItemIds);
-
-//    List<PlacementEntity> findByForestIdAndUserId(int forestId, int userId);
 }
