@@ -19,8 +19,9 @@ public class UserItemEntity {
     @Column(name="item_id")
     private int itemId;
 
-    @Column(name="user_id")
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private UserEntity user;
 
     @Column(name="total_count")
     private int totalCount;
@@ -34,5 +35,10 @@ public class UserItemEntity {
             throw new IllegalStateException("배치된 아이템이 없습니다.");
         }
         this.placedCount--;
+    }
+
+    // placed_count를 +1 하는 로직
+    public void incrementPlacedCount() {
+        this.placedCount++;
     }
 }
