@@ -22,7 +22,7 @@ public class CommandMateController {
     }
 
     // 초대 링크 생성
-    @PostMapping("/create")
+    @GetMapping("/link")
     public CreateInviteRequest createInviteLink(@RequestParam int forestId) {
 
         // 초대 링크 생성하고 결과 받기
@@ -45,7 +45,6 @@ public class CommandMateController {
         commandMateService.acceptInvite(userId, inviteCode);
 
         return ResponseEntity.ok("초대 수락 성공");
-
 
     }
 
