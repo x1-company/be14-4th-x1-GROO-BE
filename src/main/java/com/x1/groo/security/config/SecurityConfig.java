@@ -28,7 +28,6 @@ public class SecurityConfig {
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-    private final UserDetailsService userDetailsService;
 
     // JwtFilter 를 빈으로 등록
     @Bean
