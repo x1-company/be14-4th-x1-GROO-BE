@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor
 public class Diary {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
@@ -30,10 +30,10 @@ public class Diary {
     private LocalDateTime updatedAt = LocalDateTime.now();
 
     @Column(nullable = false)
-    private Long userId;
+    private int userId;
 
     @Column(nullable = false)
-    private Long forestId;
+    private int forestId;
 
     @PreUpdate
     public void preUpdate() {

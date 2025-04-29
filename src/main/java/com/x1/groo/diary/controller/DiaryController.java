@@ -33,8 +33,8 @@ public class DiaryController {
         // 2) JWT 파싱
         Claims claims = jwtUtil.parseJwt(token);
 
-        // 3) userId 클레임 꺼내기 (Number → Long)
-        Long userId = claims.get("userId", Number.class).longValue();
+        // 3) userId 클레임 꺼내기
+        int userId = claims.get("userId", Number.class).intValue();
 
         // 4) 서비스 호출
         diaryService.createDiary(req, userId);

@@ -8,8 +8,12 @@ import com.x1.groo.diary.entity.Diary;
 import com.x1.groo.diary.entity.DiaryEmotion;
 import com.x1.groo.diary.repository.DiaryEmotionRepository;
 import com.x1.groo.diary.repository.DiaryRepository;
+import com.x1.groo.forest.emotion.command.domain.aggregate.ForestEntity;
+import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
+import com.x1.groo.forest.emotion.command.domain.repository.EmotionSharedForestRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,10 +32,27 @@ public class DiaryServiceImpl implements DiaryService {
     private final DiaryRepository diaryRepo;
     private final DiaryEmotionRepository emotionRepo;
     private final EmotionService emotionService;
+    private final ForestRepository forestRepo;
+    private final EmotionSharedForestRepository sharedForestRepo;
 
     @Override
     @Transactional
-    public void createDiary(DiaryRequestDTO req, Long userId) {
+    public void createDiary(DiaryRequestDTO req, int userId) {
+        // 0) 권한 체크
+        Integer forestId = req.getForestId();
+        boolean owner = forestRepo.findById(forestId)
+                .map((ForestEntity f) -> f.getUser().getId() == userId)  // ← getUser().getId() 사용
+                .orElse(false);
+
+        boolean shared = sharedForestRepo.existsByUserIdAndForestId(userId, forestId);
+
+        if (!(owner || shared)) {
+            throw new AccessDeniedException(
+                    String.format("사용자[%d]가 숲[%d]에 대한 쓰기 권한이 없습니다.", userId, forestId)
+            );
+        }
+
+
         // 1) Diary 엔티티 생성 및 필수 값 세팅
         Diary diary = new Diary();
         diary.setContent(req.getContent());
@@ -46,8 +67,7 @@ public class DiaryServiceImpl implements DiaryService {
                 new EmotionRequestDTO(req.getContent())
         );
 
-        String mainEmotion = aiRes.getMainEmotion();
-        mainEmotion = mainEmotion
+        String mainEmotion = aiRes.getMainEmotion()
                 .trim()
                 .replaceAll("[\"\\r\\n]", "");
 

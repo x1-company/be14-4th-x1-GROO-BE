@@ -10,10 +10,10 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class DiaryEmotion {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false)
-    private Integer weight;
+    private int weight;
 
     @Column(nullable = false)
     private String emotion;

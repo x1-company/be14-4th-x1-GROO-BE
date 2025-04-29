@@ -7,7 +7,7 @@ import lombok.Data;
  */
 @Data
 public class DiaryRequestDTO {
-    private Long forestId;
+    private int forestId;
     private String content;
     private boolean isPublished = true;
 }
