@@ -2,6 +2,7 @@ package com.x1.groo.forest.mate.query.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
+import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import com.x1.groo.forest.mate.query.service.MateServiceImpl;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,9 @@ import java.util.List;
 public class MateController {
 
     private final MateServiceImpl mateService;
-    private final JwtUtil jwtUtil;   // JwtUtil 주입 추가
+    private final JwtUtil jwtUtil;
 
+    /* 날짜별 일기 조회 */
     @GetMapping("/diary/{forestId}/date")
     public ResponseEntity<List<DiaryByDateDTO>> getDiariesByDate(
             @RequestHeader(value = "Authorization") String authorizationHeader,
@@ -33,5 +35,18 @@ public class MateController {
         // 서비스 호출
         List<DiaryByDateDTO> diaries = mateService.findDiaries(userId, forestId, date);
         return ResponseEntity.ok(diaries);
+    }
+
+    /* 유저가 입장중인 우정의 숲 조회 */
+    @GetMapping("/forests")
+    public List<MateForestResponseDTO> getMyForests(
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        // 유저 ID로 우정의 숲 리스트 조회
+        return mateService.getForestsByUserId(userId);
     }
 }
