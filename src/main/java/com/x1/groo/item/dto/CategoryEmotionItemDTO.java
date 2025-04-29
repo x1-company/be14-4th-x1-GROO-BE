@@ -3,7 +3,9 @@ package com.x1.groo.item.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

@@ -8,5 +8,5 @@ import java.util.List;
 public interface ItemService {
     List<CategoryDTO>  findAllCategories();
 
-    List<CategoryEmotionItemDTO> findItemsByCategoryAndEmotion(int categoryId, String emotion);
+    List<CategoryEmotionItemDTO> findItemsByCategoryAndEmotion(int categoryId, String mainEmotion);
 }

@@ -27,8 +27,8 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<CategoryEmotionItemDTO> findItemsByCategoryAndEmotion(int categoryId, String emotion) {
-        List<CategoryEmotionItemDTO> itemDTOList = itemMapper.selectItemsByCategoryAndEmotion(categoryId, emotion);
+    public List<CategoryEmotionItemDTO> findItemsByCategoryAndEmotion(int categoryId, String mainEmotion) {
+        List<CategoryEmotionItemDTO> itemDTOList = itemMapper.selectItemsByCategoryAndEmotion(categoryId, mainEmotion);
 
         return itemDTOList;
     }
