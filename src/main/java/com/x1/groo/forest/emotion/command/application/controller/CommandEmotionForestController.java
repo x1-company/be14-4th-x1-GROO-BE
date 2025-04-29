@@ -96,4 +96,19 @@ public class CommandEmotionForestController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/mailbox")
+    public ResponseEntity<Void> deleteMailbox (@RequestHeader(value = "Authorization") String authorizationHeader,
+                                               @RequestParam int mailboxId,
+                                               @RequestParam int forestId) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.deleteMailbox(userId, mailboxId, forestId);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
