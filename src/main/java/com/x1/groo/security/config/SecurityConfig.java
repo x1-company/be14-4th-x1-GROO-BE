@@ -71,11 +71,11 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**",
-                                "/v3/api-docs/**", "/health")
+                                "/v3/api-docs/**", "/health" )
                         .permitAll()
                         .requestMatchers("/auth/**", "/mails/**", "/image/**")
                         .permitAll()
-                        .requestMatchers("/items/**")
+                        .requestMatchers("/items/**", "/mate/** ")
                         .authenticated()
                         .anyRequest()
                         .authenticated()
