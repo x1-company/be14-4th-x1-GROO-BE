@@ -3,6 +3,8 @@ package com.x1.groo.forest.emotion.command.domain.aggregate;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,17 +20,29 @@ public class PlacementEntity {
     private int id;
 
     @Column(name="position_x")
-    private int positionX;
+    private BigDecimal positionX;
 
     @Column(name="position_y")
-    private int positionY;
+    private BigDecimal positionY;
 
-    @Column(name="forest_id")
-    private int forestId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="forest_id")
+    private ForestEntity forest;
 
-    @Column(name="user_id")
-    private int userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
+    private UserEntity user;
 
-    @Column(name="user_item_id")
-    private int userItemId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_item_id")
+    private UserItemEntity userItem;
+
+    public PlacementEntity(BigDecimal positionX, BigDecimal positionY, ForestEntity forest,
+                           UserEntity user, UserItemEntity userItem) {
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.forest = forest;
+        this.user = user;
+        this.userItem = userItem;
+    }
 }

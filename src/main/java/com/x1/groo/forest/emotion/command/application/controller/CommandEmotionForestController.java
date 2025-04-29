@@ -2,6 +2,8 @@ package com.x1.groo.forest.emotion.command.application.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +26,7 @@ public class CommandEmotionForestController {
     }
 
     @DeleteMapping("/placement")
-    public ResponseEntity<Void> unplaceItemById(@RequestHeader(value = "Authorization") String authorizationHeader,
+    public ResponseEntity<Void> retrieveItemById(@RequestHeader(value = "Authorization") String authorizationHeader,
                                                 @RequestParam int placementId) {
 
         // "Bearer " 부분 제거
@@ -32,9 +34,49 @@ public class CommandEmotionForestController {
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 
-        log.info("userId = {}", userId);
+        commandEmotionForestService.retrieveItemById(userId, placementId);
 
-        commandEmotionForestService.unplaceItemById(userId, placementId);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/placements")
+    public ResponseEntity<Void> retrieveAllItems(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                                @RequestParam int forestId) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.retrieveAllItems(userId, forestId);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/placement")
+    public ResponseEntity<Void> placement(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                          @RequestBody RequestPlacementVO requestPlacementVO) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.placeItem(userId, requestPlacementVO);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/placement")
+    public ResponseEntity<Void> replacement(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                            @RequestBody RequestReplacementVO requestReplacementVO) {
+
+        // "Bearer " 부분 제거
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.replaceItem(userId, requestReplacementVO);
 
         return ResponseEntity.ok().build();
     }
