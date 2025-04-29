@@ -94,13 +94,13 @@ public class DiaryController {
 
     /** 임시 저장된 일기 수정 */
     @PutMapping("/save/{diaryId}")
-    public ResponseEntity<DiarySaveResponseDTO> updateSave(
+    public ResponseEntity<DiarySaveUpdateResponseDTO> updateSave(
             @PathVariable int diaryId,
             @RequestBody DiarySaveRequestDTO req,
             @RequestHeader("Authorization") String authHeader
     ) {
         int userId = extractUserId(authHeader);
-        DiarySaveResponseDTO updated = diaryService.updateSave(userId, diaryId, req);
-        return ResponseEntity.ok(updated);
+        DiarySaveUpdateResponseDTO resp = diaryService.updateSave(userId, diaryId, req);
+        return ResponseEntity.ok(resp);
     }
 }

@@ -164,7 +164,7 @@ public class DiaryServiceImpl implements DiaryService {
     // 임시 저장 일기 수정
     @Override
     @Transactional
-    public DiarySaveResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO req) {
+    public DiarySaveUpdateResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO req) {
         Diary diary = diaryRepo.findById(diaryId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 임시 저장입니다."));
 
@@ -172,11 +172,13 @@ public class DiaryServiceImpl implements DiaryService {
             throw new AccessDeniedException("해당 임시 저장을 수정할 권한이 없습니다.");
         }
 
-        // 내용만 업데이트
         diary.setContent(req.getContent());
         diary.setUpdatedAt(LocalDateTime.now());
         diaryRepo.save(diary);
 
-        return new DiarySaveResponseDTO(diary.getContent());
+        return new DiarySaveUpdateResponseDTO(
+                diary.getContent(),
+                diary.getUpdatedAt()
+        );
     }
 }

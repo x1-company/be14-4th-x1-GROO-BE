@@ -18,5 +18,5 @@ public interface DiaryService {
     /** 임시 저장된 일기 상세 조회 */
     DiarySaveDetailDTO getSaveDetail(int userId, int diaryId);
     /** 임시 저장된 일기 수정 */
-    DiarySaveResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO request);
+    DiarySaveUpdateResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO request);
 }
