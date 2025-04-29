@@ -3,6 +3,7 @@ package com.x1.groo.forest.mate.query.controller;
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
 import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
+import com.x1.groo.forest.mate.query.dto.MateForestDetailDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
 import com.x1.groo.forest.mate.query.service.MateServiceImpl;
 import io.jsonwebtoken.Claims;
@@ -65,5 +66,12 @@ public class MateController {
 
         // 유저 ID로 우정의 숲 리스트 조회
         return mateService.getForestsByUserId(userId);
+    }
+
+    /* 우정의 숲 상세 조회 */
+    @GetMapping("/detail/{forestId}")
+    public List<MateForestDetailDTO> getForestDetail(@PathVariable int forestId) {
+
+        return mateService.getForestDetail(forestId);
     }
 }
