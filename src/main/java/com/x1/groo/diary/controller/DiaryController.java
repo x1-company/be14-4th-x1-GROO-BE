@@ -1,15 +1,14 @@
 package com.x1.groo.diary.controller;
 
 import com.x1.groo.common.JwtUtil;
-import com.x1.groo.diary.dto.DiaryRequestDTO;
-import com.x1.groo.diary.dto.DiaryResponseDTO;
-import com.x1.groo.diary.dto.DiarySaveRequestDTO;
-import com.x1.groo.diary.dto.DiarySaveResponseDTO;
+import com.x1.groo.diary.dto.*;
 import com.x1.groo.diary.service.DiaryService;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 일기 등록 API 엔드포인트
@@ -58,5 +57,22 @@ public class DiaryController {
 
         DiarySaveResponseDTO response = diaryService.saveDiary(req, userId);
         return ResponseEntity.ok(response);
+    }
+
+    /** 임시 저장 조회 */
+    @GetMapping("/save")
+    public ResponseEntity<List<DiarySaveInfoDTO>> getSaves(
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        return ResponseEntity.ok(diaryService.getSaves(userId));
+    }
+
+    private int extractUserId(String authHeader) {
+        String token = authHeader.startsWith("Bearer ")
+                ? authHeader.substring(7)
+                : authHeader.trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        return claims.get("userId", Number.class).intValue();
     }
 }
