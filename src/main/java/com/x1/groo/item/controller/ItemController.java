@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 import java.util.List;
 
 @RestController
@@ -35,8 +36,8 @@ public class ItemController {
     @GetMapping("/items")
     public ResponseEntity<List<CategoryEmotionItemDTO>> getItemsByCategoryAndEmotion(
             @RequestParam int categoryId,
-            @RequestParam String emotion) {
-        List<CategoryEmotionItemDTO> items = itemService.findItemsByCategoryAndEmotion(categoryId, emotion);
+            @RequestParam String mainEmotion) {
+        List<CategoryEmotionItemDTO> items = itemService.findItemsByCategoryAndEmotion(categoryId, mainEmotion);
 
         return ResponseEntity.ok(items);
     }
