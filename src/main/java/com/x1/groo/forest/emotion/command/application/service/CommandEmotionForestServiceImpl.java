@@ -5,16 +5,14 @@ import com.x1.groo.forest.emotion.command.domain.repository.*;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,18 +22,20 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
     private final PlacementRepository placementRepository;
     private final UserItemRepository userItemRepository;
-    private final ForestRepository forestRepository;;
+    private final ForestRepository forestRepository;
     private final UserRepository userRepository;
     private final MailboxRepository mailboxRepository;
 
+    /* 단일 아이템 회수 */
     @Transactional
     @Override
     public void retrieveItemById(int userId, int placementId) {
         PlacementEntity placement = placementRepository.findById(placementId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 배치가 존재하지 않습니다. id=" + placementId));
 
+        // userId 검증
         if (placement.getUser().getId() != userId) {
-            throw new IllegalArgumentException("사용자가 일치하지 않습니다.");
+            throw new SecurityException("해당 배치에 접근 권한이 없습니다.");
         }
 
         UserItemEntity userItem = userItemRepository.findById(placement.getUserItem().getId())
@@ -48,66 +48,60 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         placementRepository.deleteById(placementId);
     }
 
+    /* 전체 아이템 회수 */
     @Transactional
     @Override
     public void retrieveAllItems(int userId, int forestId) {
-        // 1. placement 가져오기
-        List<PlacementEntity> placements = placementRepository.findByForestIdAndUserId(forestId, userId);
+        // 1. forestId + userId로 user_item 조회
+        List<UserItemEntity> userItems = userItemRepository.findByUserIdAndForestId(userId, forestId);
 
-        if (placements.isEmpty()) {
-            return; // 삭제할게 없으면 바로 리턴
+        if (userItems.isEmpty()) {
+            return; // 조회된 게 없으면 끝
         }
 
-        // 2. 관련 userItem id 모으기
-        List<Integer> userItemIds = placements.stream()
-                .map(placement -> placement.getUserItem().getId())
-                .toList();
-
-        // 3. userItem 가져오기
-        List<UserItemEntity> userItems = userItemRepository.findAllById(userItemIds);
-
-        // 4. id -> entity 매핑
-        Map<Integer, UserItemEntity> userItemMap = userItems.stream()
-                .collect(Collectors.toMap(UserItemEntity::getId, Function.identity()));
-
-        // 5. placedCount 감소
-        for (PlacementEntity placement : placements) {
-            UserItemEntity userItem = userItemMap.get(placement.getUserItem().getId());
-            if (userItem != null) {
-                userItem.decreasePlacedCount();
-            }
+        // 2. placed_count를 0으로 변경
+        for (UserItemEntity userItem : userItems) {
+            userItem.setPlacedCount(0);
         }
+        userItemRepository.saveAll(userItems);
 
-        // 6. userItem을 db에 반영
-        userItemRepository.saveAll(userItemMap.values());
+        // 3. user_item id 목록 가져오기
+        List<Integer> userItemIds = userItems.stream()
+                .map(UserItemEntity::getId)
+                .collect(Collectors.toList());
 
-        // 7. placement 삭제
-        placementRepository.deleteAll(placements);
+        // 4. placement 삭제
+        placementRepository.deleteByUserItemIdIn(userItemIds);
     }
 
+    /* 아이템 배치 */
     @Transactional
     @Override
     public void placeItem(int userId, RequestPlacementVO requestPlacementVO) {
-        // 1. user_item 검증 + placedCount 증가
+        
+        // 1. userItem 조회 및 검증
         UserItemEntity userItem = userItemRepository.findByIdAndUserId(requestPlacementVO.getUserItemId(), userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 아이템을 소유하고 있지 않습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("아이템 정보가 일치하지 않습니다"));
 
-        userItem.incrementPlacedCount();  // placedCount += 1
+        // 2. placed_count 증가
+        userItem.setPlacedCount(userItem.getPlacedCount() + 1);
 
-        // 2. forest, user 조회
-        ForestEntity forest = forestRepository.findById(requestPlacementVO.getForestId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 숲입니다."));
-
+        // 3. userEntity 조회 (PlacementEntity에 필요)
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다."));
+                .orElseThrow(() -> new EntityNotFoundException("사용자가 유효하지 않습니다"));
 
-        // 3. placement 저장
-        PlacementEntity placement = new PlacementEntity(requestPlacementVO.getItemPositionX(),
-                                                        requestPlacementVO.getItemPositionY(),
-                                                        forest, user, userItem);
+        // 4. placement 생성 및 저장
+        PlacementEntity placement = new PlacementEntity();
+        placement.setPositionX(requestPlacementVO.getItemPositionX());
+        placement.setPositionY(requestPlacementVO.getItemPositionY());
+        placement.setUser(user);
+        placement.setUserItem(userItem);
+
+        // 저장
         placementRepository.save(placement);
     }
 
+    /* 아이템 재배치 */
     @Transactional
     @Override
     public void replaceItem(int userId, RequestReplacementVO requestReplacementVO) {
@@ -115,18 +109,19 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         PlacementEntity placement = placementRepository.findById(requestReplacementVO.getPlacementId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 배치가 존재하지 않습니다. id=" + requestReplacementVO.getPlacementId()));
 
-        // 2. 권한 확인
-        if (placement.getUser().getId() != userId) {
-            throw new IllegalArgumentException("사용자가 일치하지 않습니다.");
+        // 2. 소유자 검증
+        if (placement.getUser() == null || placement.getUser().getId() != userId) {
+            throw new SecurityException("본인의 배치만 수정할 수 있습니다.");
         }
 
         // 3. 위치 변경
         placement.setPositionX(requestReplacementVO.getItemPositionX());
         placement.setPositionY(requestReplacementVO.getItemPositionY());
 
-        // 4. 저장 (save 안 해도 됨 — JPA는 @Transactional 안에서 dirty checking으로 자동 update 됨)
+        // 4. 저장 (생략 가능 - JPA의 dirty checking)
     }
 
+    /* 방명록 작성 */
     @Override
     public void createMailbox(int userId, RequestMailboxVO requestMailboxVO) {
         MailboxEntity mailbox = new MailboxEntity();
@@ -139,6 +134,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         mailboxRepository.save(mailbox);
     }
 
+    /* 방명록 삭제 */
     @Transactional
     @Override
     public void deleteMailbox(int userId, int mailboxId, int forestId) {

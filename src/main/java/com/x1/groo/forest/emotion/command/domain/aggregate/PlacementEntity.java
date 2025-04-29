@@ -26,10 +26,6 @@ public class PlacementEntity {
     private BigDecimal positionY;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="forest_id")
-    private ForestEntity forest;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
 
@@ -37,11 +33,10 @@ public class PlacementEntity {
     @JoinColumn(name="user_item_id")
     private UserItemEntity userItem;
 
-    public PlacementEntity(BigDecimal positionX, BigDecimal positionY, ForestEntity forest,
+    public PlacementEntity(BigDecimal positionX, BigDecimal positionY,
                            UserEntity user, UserItemEntity userItem) {
         this.positionX = positionX;
         this.positionY = positionY;
-        this.forest = forest;
         this.user = user;
         this.userItem = userItem;
     }
