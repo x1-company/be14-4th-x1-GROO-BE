@@ -144,4 +144,20 @@ public class DiaryServiceImpl implements DiaryService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    // 임시 저장 상세 조회
+    @Override
+    @Transactional
+    public DiarySaveDetailDTO getSaveDetail(int userId, int diaryId) {
+        Diary diary = diaryRepo.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 임시 저장입니다."));
+        if (diary.getUserId() != userId || diary.getIsPublished()) {
+            throw new AccessDeniedException("해당 임시 저장에 접근할 권한이 없습니다.");
+        }
+        return new DiarySaveDetailDTO(
+                diary.getId(),
+                diary.getContent(),
+                diary.getCreatedAt()
+        );
+    }
 }

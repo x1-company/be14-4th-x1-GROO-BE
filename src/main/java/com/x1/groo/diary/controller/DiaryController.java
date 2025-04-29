@@ -75,4 +75,20 @@ public class DiaryController {
         Claims claims = jwtUtil.parseJwt(token);
         return claims.get("userId", Number.class).intValue();
     }
+
+    /** 임시 저장 상세 조회 */
+    @GetMapping("/save/{diaryId}")
+    public ResponseEntity<DiarySaveDetailDTO> getSaveDetail(
+            @PathVariable int diaryId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.startsWith("Bearer ")
+                ? authHeader.substring(7)
+                : authHeader.trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = claims.get("userId", Number.class).intValue();
+
+        DiarySaveDetailDTO detail = diaryService.getSaveDetail(userId, diaryId);
+        return ResponseEntity.ok(detail);
+    }
 }

@@ -15,4 +15,6 @@ public interface DiaryService {
 
     /** 임시 저장된 일기 조회 */
     List<DiarySaveInfoDTO> getSaves(int userId);
+    /** 임시 저장된 일기 상세 조회 */
+    DiarySaveDetailDTO getSaveDetail(int userId, int diaryId);
 }
