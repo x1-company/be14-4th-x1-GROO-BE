@@ -1,23 +1,19 @@
 package com.x1.groo.forest.emotion.query.controller;
 
 import com.x1.groo.common.JwtUtil;
-import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
 import com.x1.groo.forest.emotion.query.service.QueryForestEmotionService;
 import io.jsonwebtoken.Claims;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping
@@ -33,17 +29,20 @@ public class QueryForestEmotionController {
         this.queryForestEmotionService = queryForestEmotionService;
     }
 
-    @GetMapping("/items/{categoryId}")
+    // 기록의 조각 조회
+    @GetMapping("/items/{categoryId}/{forestId}")
     public ResponseEntity<?> getItems(
             @RequestHeader(value = "Authorization", required = false) String authorizationHeader,
-            @PathVariable int categoryId) {
+            @PathVariable int categoryId,
+            @PathVariable int forestId) {
+
         String token = authorizationHeader.replace("Bearer", "").trim();
         Claims claims = jwtUtil.parseJwt(token);
         int userId = ((Number) claims.get("userId")).intValue();
 
         log.info("userId = {}", userId);
 
-        List<QueryForestEmotionUserItemDTO> items = queryForestEmotionService.getPieceOfMemory(userId, categoryId);
+        List<QueryForestEmotionUserItemDTO> items = queryForestEmotionService.getPieceOfMemory(userId, categoryId, forestId);
 
         if (items == null || items.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)

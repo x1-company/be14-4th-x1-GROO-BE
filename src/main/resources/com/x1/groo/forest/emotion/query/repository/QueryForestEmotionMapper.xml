@@ -52,74 +52,77 @@
         <result property="itemImageUrl" column="item_image_url"/>
     </resultMap>
 
+    <select id="findUserIdByForestId" resultType="int">
+        SELECT user_id
+        FROM forest
+        WHERE id = #{forestId}
+    </select>
+
     <select id="findPieceOfMemory" resultMap="QueryForestUserItemResultMap">
-        SELECT
-               ui.id
+        SELECT ui.id
              , ui.item_id
              , ui.total_count
              , ui.placed_count
              , i.name
              , i.category_id
              , i.image_url
-          FROM user_item ui
-          JOIN item i ON ui.item_id = i.id
-         WHERE ui.user_id = #{userId}
-           AND i.category_id = #{categoryId}
+        FROM user_item ui
+                 JOIN item i ON ui.item_id = i.id
+        WHERE ui.user_id = #{userId}
+          AND i.category_id = #{categoryId}
+          AND ui.forest_id = #{forestId}
     </select>
 
     <select id="findMailboxList" resultMap="QueryForestMailboxListResultMap">
-        SELECT
-               m.id
+        SELECT m.id
              , m.created_at
              , m.forest_id
-          FROM mailbox m
-          JOIN forest f ON m.forest_id = f.id
-         WHERE m.forest_id = #{forestId}
-           AND m.is_deleted = false
-           AND (f.is_public = true
+        FROM mailbox m
+                 JOIN forest f ON m.forest_id = f.id
+        WHERE m.forest_id = #{forestId}
+          AND m.is_deleted = false
+          AND (f.is_public = true
             OR (f.is_public = false AND f.user_id = #{userId}))
-         ORDER BY m.created_at DESC;
+        ORDER BY m.created_at DESC;
     </select>
 
     <select id="findMailboxDetail" resultMap="QueryForestMailboxDetailResultMap">
-        SELECT
-               m.id
+        SELECT m.id
              , m.content
              , m.created_at
              , m.forest_id
              , m.user_id
-          FROM mailbox m
-          JOIN forest f ON m.forest_id = f.id
-         WHERE m.id = #{id}
-           AND m.is_deleted = false
-           AND (f.is_public = true
+        FROM mailbox m
+                 JOIN forest f ON m.forest_id = f.id
+        WHERE m.id = #{id}
+          AND m.is_deleted = false
+          AND (f.is_public = true
             OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
 
 
     <select id="findForestDetail" resultMap="QueryForestDetailResultMap">
-        SELECT
-               f.id AS forest_id
-             , f.name AS forest_name
+        SELECT f.id            AS forest_id
+             , f.name          AS forest_name
              , f.is_public
              , f.background_id AS background_id
              , f.user_id
-             , b.image_url AS background_image_url
-             , p.id AS placement_id
-             , p.position_x AS placement_position_x
-             , p.position_y AS placement_position_y
-             , ui.id AS user_item_id
+             , b.image_url     AS background_image_url
+             , p.id            AS placement_id
+             , p.position_x    AS placement_position_x
+             , p.position_y    AS placement_position_y
+             , ui.id           AS user_item_id
              , ui.placed_count
-             , i.id AS item_id
-             , i.name AS item_name
-             , i.image_url AS item_image_url
-          FROM forest f
-          LEFT JOIN background b ON f.background_id = b.id
-          LEFT JOIN user_item ui ON ui.forest_id = f.id AND ui.placed_count > 0
-          LEFT JOIN placement p ON p.user_item_id = ui.id
-          LEFT JOIN item i ON ui.item_id = i.id
-         WHERE f.id = #{forestId}
-           AND (f.is_public = true
+             , i.id            AS item_id
+             , i.name          AS item_name
+             , i.image_url     AS item_image_url
+        FROM forest f
+                 LEFT JOIN background b ON f.background_id = b.id
+                 LEFT JOIN user_item ui ON ui.forest_id = f.id AND ui.placed_count > 0
+                 LEFT JOIN placement p ON p.user_item_id = ui.id
+                 LEFT JOIN item i ON ui.item_id = i.id
+        WHERE f.id = #{forestId}
+          AND (f.is_public = true
             OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
 </mapper>
