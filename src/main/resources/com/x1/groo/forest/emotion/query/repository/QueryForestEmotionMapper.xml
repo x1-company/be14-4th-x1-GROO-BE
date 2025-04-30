@@ -52,6 +52,11 @@
         <result property="itemImageUrl" column="item_image_url"/>
     </resultMap>
 
+    <resultMap id="QueryForestListResultMap" type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionListDTO">
+        <result property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
     <resultMap id="DiaryWithEmotionResultMap" type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDiaryByDateDTO">
         <id property="diaryId" column="diary_id"/>
         <result property="content" column="content"/>
@@ -136,6 +141,20 @@
         WHERE f.id = #{forestId}
           AND (f.is_public = true
             OR (f.is_public = false AND f.user_id = #{userId}));
+    </select>
+
+    <select id="findForestList" resultMap="QueryForestListResultMap">
+        SELECT
+               f.id
+             , f.user_id
+          FROM forest f
+         WHERE f.user_id = #{userId}
+           AND NOT EXISTS (
+               SELECT 1
+                 FROM shared_forest sf
+                WHERE sf.forest_id = f.id)
+         ORDER BY f.id DESC
+         LIMIT 1;
     </select>
 
     <select id="findDiaryByDateAndForestId" resultMap="DiaryWithEmotionResultMap">
