@@ -110,6 +110,7 @@ public class CommandMateServiceImpl implements CommandMateService {
     }
 
 
+    // 우정의 숲 생성
     @Override
     @Transactional
     public void createMateForest(int userId, CreateMateForestRequest request) {

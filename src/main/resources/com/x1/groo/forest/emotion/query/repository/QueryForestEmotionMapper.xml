@@ -140,7 +140,7 @@
                  LEFT JOIN item i ON ui.item_id = i.id
         WHERE f.id = #{forestId}
           AND (f.is_public = true
-            OR (f.is_public = false AND f.user_id = #{userId}));
+           OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
 
     <select id="findForestList" resultMap="QueryForestListResultMap">

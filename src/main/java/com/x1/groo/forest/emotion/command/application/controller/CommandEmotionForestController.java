@@ -2,11 +2,14 @@ package com.x1.groo.forest.emotion.command.application.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestCreateVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPublicVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
+import com.x1.groo.forest.mate.command.domain.vo.CreateMateForestRequest;
 import io.jsonwebtoken.Claims;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -125,6 +128,21 @@ public class CommandEmotionForestController {
         commandEmotionForestService.updateForestPublic(forestId, userId);
 
         return ResponseEntity.ok().build();
+    }
+
+    // 숲 생성
+    @PostMapping("/new")
+    public ResponseEntity<Map<String, String>> createEmotionForest(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @RequestBody RequestCreateVO request) {
+
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        commandEmotionForestService.createEmotionForest(userId, request);
+
+        return ResponseEntity.ok(Map.of("message", "감정의 숲이 생성되었습니다."));
     }
 
 
