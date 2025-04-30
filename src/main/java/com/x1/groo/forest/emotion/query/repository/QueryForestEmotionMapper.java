@@ -1,5 +1,11 @@
 package com.x1.groo.forest.emotion.query.repository;
 
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionListDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
+import java.util.List;
 import com.x1.groo.forest.emotion.query.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -54,5 +60,9 @@ public interface QueryForestEmotionMapper {
     Boolean isOwnerOfForest(
             @Param("userId") int userId,
             @Param("forestId") int forestId
+    );
+
+    List<QueryForestEmotionListDTO> findForestList(
+            @Param("userId") int userId
     );
 }
