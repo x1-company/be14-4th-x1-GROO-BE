@@ -115,7 +115,7 @@
              , i.image_url AS item_image_url
           FROM forest f
           LEFT JOIN background b ON f.background_id = b.id
-          LEFT JOIN user_item ui ON ui.forest_id = f.id
+          LEFT JOIN user_item ui ON ui.forest_id = f.id AND ui.placed_count > 0
           LEFT JOIN placement p ON p.user_item_id = ui.id
           LEFT JOIN item i ON ui.item_id = i.id
          WHERE f.id = #{forestId}
