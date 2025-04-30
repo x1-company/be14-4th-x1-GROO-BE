@@ -114,4 +114,20 @@ public class DiaryController {
         diaryService.deleteSave(userId, diaryId);
         return ResponseEntity.noContent().build();
     }
+
+    /** 일기 수정 **/
+    @PutMapping("/edit")
+    public ResponseEntity<DiaryUpdateResponseDTO> edit(
+            @RequestBody DiaryUpdateRequestDTO req,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        String token = authHeader.startsWith("Bearer ")
+                ? authHeader.substring(7)
+                : authHeader.trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = claims.get("userId", Number.class).intValue();
+
+        DiaryUpdateResponseDTO updatedDiary = diaryService.updateDiary(req, userId);
+        return ResponseEntity.ok(updatedDiary);
+    }
 }
