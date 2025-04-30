@@ -76,7 +76,8 @@
           JOIN forest f ON m.forest_id = f.id
          WHERE m.forest_id = #{forestId}
            AND m.is_deleted = false
-           AND f.is_public = true
+           AND (f.is_public = true
+            OR (f.is_public = false AND f.user_id = #{userId}))
          ORDER BY m.created_at DESC;
     </select>
 
@@ -91,8 +92,10 @@
           JOIN forest f ON m.forest_id = f.id
          WHERE m.id = #{id}
            AND m.is_deleted = false
-           AND f.is_public = true;
+           AND (f.is_public = true
+            OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
+
 
     <select id="findForestDetail" resultMap="QueryForestDetailResultMap">
         SELECT
@@ -102,13 +105,11 @@
              , f.background_id AS background_id
              , f.user_id
              , b.image_url AS background_image_url
-
              , p.id AS placement_id
              , p.position_x AS placement_position_x
              , p.position_y AS placement_position_y
              , ui.id AS user_item_id
              , ui.placed_count
-
              , i.id AS item_id
              , i.name AS item_name
              , i.image_url AS item_image_url
@@ -118,7 +119,7 @@
           LEFT JOIN placement p ON p.user_item_id = ui.id
           LEFT JOIN item i ON ui.item_id = i.id
          WHERE f.id = #{forestId}
-           AND f.is_public = true
-           AND p.id IS NOT NULL;
+           AND (f.is_public = true
+            OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
 </mapper>

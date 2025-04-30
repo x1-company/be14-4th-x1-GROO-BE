@@ -56,22 +56,40 @@ public class QueryForestEmotionController {
 
     // 감정의 숲에 작성된 방명록 리스트 조회
     @GetMapping("/mailbox-lists/{forestId}")
-    public List<QueryForestEmotionMailboxListDTO> getMailboxList(@PathVariable int forestId) {
+    public ResponseEntity<List<QueryForestEmotionMailboxListDTO>> getMailboxList(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int forestId) {
 
-        return queryForestEmotionService.getMailboxList(forestId);
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        int userId = ((Number) jwtUtil.parseJwt(token).get("userId")).intValue();
+
+        List<QueryForestEmotionMailboxListDTO> result = queryForestEmotionService.getMailboxList(userId, forestId);
+        return ResponseEntity.ok(result);
     }
 
     // 감정의 숲에 작성된 방명록 상세 조회
     @GetMapping("/mailbox-detail/{id}")
-    public List<QueryForestEmotionMailboxDTO> getMailboxDetail(@PathVariable int id) {
+    public ResponseEntity<List<QueryForestEmotionMailboxDTO>> getMailboxDetail(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int id) {
 
-        return queryForestEmotionService.getMailboxDetail(id);
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        int userId = ((Number) jwtUtil.parseJwt(token).get("userId")).intValue();
+
+        List<QueryForestEmotionMailboxDTO> result = queryForestEmotionService.getMailboxDetail(userId, id);
+        return ResponseEntity.ok(result);
     }
 
     // 감정의 숲 상세 조회
     @GetMapping("/detail/{forestId}")
-    public List<QueryForestEmotionDetailDTO> getForestDetail(@PathVariable int forestId) {
+    public ResponseEntity<List<QueryForestEmotionDetailDTO>> getForestDetail(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int forestId) {
 
-        return queryForestEmotionService.getForestDetail(forestId);
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        int userId = ((Number) jwtUtil.parseJwt(token).get("userId")).intValue();
+
+        List<QueryForestEmotionDetailDTO> result = queryForestEmotionService.getForestDetail(userId, forestId);
+        return ResponseEntity.ok(result);
     }
 }

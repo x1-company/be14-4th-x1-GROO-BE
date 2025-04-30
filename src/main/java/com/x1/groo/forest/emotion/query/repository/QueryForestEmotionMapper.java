@@ -18,14 +18,17 @@ public interface QueryForestEmotionMapper {
             );
 
     List<QueryForestEmotionMailboxListDTO> findMailboxList(
+            @Param("userId") int userId,
             @Param("forestId") int forestId
             );
 
     List<QueryForestEmotionMailboxDTO> findMailboxDetail(
+            @Param("userId") int userId,
             @Param("id") int id
     );
 
     List<QueryForestEmotionDetailDTO> findForestDetail(
+            @Param("userId") int userId,
             @Param("forestId") int forestId
     );
 }

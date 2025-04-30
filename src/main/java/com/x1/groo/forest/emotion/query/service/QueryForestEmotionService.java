@@ -9,10 +9,10 @@ import java.util.List;
 public interface QueryForestEmotionService {
     List<QueryForestEmotionUserItemDTO> getPieceOfMemory(int userId, int categoryId);
 
-    List<QueryForestEmotionMailboxListDTO> getMailboxList(int forestId);
+    List<QueryForestEmotionMailboxListDTO> getMailboxList(int userId, int forestId);
 
-    List<QueryForestEmotionMailboxDTO> getMailboxDetail(int id);
+    List<QueryForestEmotionMailboxDTO> getMailboxDetail(int userId, int id);
 
-    List<QueryForestEmotionDetailDTO> getForestDetail(int forestId);
+    List<QueryForestEmotionDetailDTO> getForestDetail(int userId, int forestId);
 }
 
