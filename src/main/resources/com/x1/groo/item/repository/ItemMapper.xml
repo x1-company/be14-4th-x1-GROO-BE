@@ -21,8 +21,8 @@
         <result property="id" column="id"/>
         <result property="name" column="name"/>
         <result property="imageUrl" column="image_url"/>
-        <result property="categoryId" column="category_id"/>
         <result property="emotion" column="emotion"/>
+        <result property="categoryId" column="category_id"/>
     </resultMap>
 
     <select id="selectItemsByCategoryAndEmotion" resultMap="categoryEmotionItemMap">
@@ -31,6 +31,7 @@
              , NAME
              , IMAGE_URL
              , EMOTION
+             , CATEGORY_ID
         FROM ITEM
         WHERE CATEGORY_ID = #{categoryId}
           AND EMOTION = #{mainEmotion}
