@@ -21,6 +21,8 @@ public interface DiaryService {
     DiarySaveUpdateResponseDTO updateSave(int userId, int diaryId, DiarySaveRequestDTO request);
     /** 임시 저장된 일기 삭제 */
     void deleteSave(int userId, int diaryId);
+    /** 임시 저장된 일기를 등록 */
+    DiaryResponseDTO publishSave(int userId, int diaryId);
     /** 일기 수정 **/
     DiaryUpdateResponseDTO updateDiary(DiaryUpdateRequestDTO request, int userId);
 }

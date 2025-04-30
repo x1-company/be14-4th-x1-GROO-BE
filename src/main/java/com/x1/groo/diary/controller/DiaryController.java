@@ -43,7 +43,9 @@ public class DiaryController {
         return ResponseEntity.ok(response);
     }
 
-    /** 임시 저장 핸들러 */
+    /**
+     * 임시 저장 핸들러
+     */
     @PostMapping("/save")
     public ResponseEntity<DiarySaveResponseDTO> save(
             @RequestBody DiarySaveRequestDTO req,
@@ -59,7 +61,9 @@ public class DiaryController {
         return ResponseEntity.ok(response);
     }
 
-    /** 임시 저장 조회 */
+    /**
+     * 임시 저장 조회
+     */
     @GetMapping("/save")
     public ResponseEntity<List<DiarySaveInfoDTO>> getSaves(
             @RequestHeader("Authorization") String authHeader
@@ -76,7 +80,9 @@ public class DiaryController {
         return claims.get("userId", Number.class).intValue();
     }
 
-    /** 임시 저장 상세 조회 */
+    /**
+     * 임시 저장 상세 조회
+     */
     @GetMapping("/save/{diaryId}")
     public ResponseEntity<DiarySaveDetailDTO> getSaveDetail(
             @PathVariable int diaryId,
@@ -92,7 +98,9 @@ public class DiaryController {
         return ResponseEntity.ok(detail);
     }
 
-    /** 임시 저장된 일기 수정 */
+    /**
+     * 임시 저장된 일기 수정
+     */
     @PutMapping("/save/{diaryId}")
     public ResponseEntity<DiarySaveUpdateResponseDTO> updateSave(
             @PathVariable int diaryId,
@@ -104,7 +112,9 @@ public class DiaryController {
         return ResponseEntity.ok(resp);
     }
 
-    /** 임시 저장된 일기 삭제 */
+    /**
+     * 임시 저장된 일기 삭제
+     */
     @DeleteMapping("/save/{diaryId}")
     public ResponseEntity<Void> deleteSave(
             @PathVariable int diaryId,
@@ -115,7 +125,21 @@ public class DiaryController {
         return ResponseEntity.noContent().build();
     }
 
-    /** 일기 수정 **/
+    /**
+     * 임시 저장된 일기 등록
+     */
+    @PostMapping("/save/{diaryId}/publish")
+    public ResponseEntity<DiaryResponseDTO> publishSave(
+            @PathVariable int diaryId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        return ResponseEntity.ok(diaryService.publishSave(userId, diaryId));
+    }
+
+    /**
+     * 일기 수정
+     **/
     @PutMapping("/edit")
     public ResponseEntity<DiaryUpdateResponseDTO> edit(
             @RequestBody DiaryUpdateRequestDTO req,

@@ -16,6 +16,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import java.util.Collections;
+
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -89,18 +91,16 @@ public class DiaryServiceImpl implements DiaryService {
             emotionRepo.save(de);
         });
 
-        // 감정 기반 아이템 조회
-        List<CategoryEmotionItemDTO> emotionItems = 
+        List<CategoryEmotionItemDTO> emotionItems =
           itemService.findItemsByCategoryAndEmotion(categoryId, mainEmotion);
-      
-        // DTO 반환
+
         return new DiaryResponseDTO(
                 savedDiary.getId(),
                 userId,
                 forestId,
                 top2,
                 mainEmotion,
-                weather,          // aiRes.getWeather() 값
+                weather,
                 req.getContent(),
                 emotionItems
         );
@@ -192,6 +192,57 @@ public class DiaryServiceImpl implements DiaryService {
             throw new AccessDeniedException("해당 임시 저장을 삭제할 권한이 없습니다.");
         }
         diaryRepo.delete(diary);
+    }
+
+    // 임시 저장된 일기 등록
+    @Override
+    @Transactional
+    public DiaryResponseDTO publishSave(int userId, int diaryId) {
+        Diary d = diaryRepo.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("없음"));
+        if (d.getUserId() != userId || d.getIsPublished()) {
+            throw new AccessDeniedException("권한 없음");
+        }
+        EmotionResponseDTO aiRes = emotionService.analyzeEmotion(
+                new EmotionRequestDTO(d.getContent())
+        );
+        String mainEmotion = aiRes.getMainEmotion().trim();
+        String weather = aiRes.getWeather();
+
+        d.setIsPublished(true);
+        d.setWeather(weather);
+        d.setUpdatedAt(LocalDateTime.now());
+        diaryRepo.save(d);
+
+        Map<String, Integer> top2 = aiRes.getEmotionResult().entrySet().stream()
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .limit(2)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (o, n) -> o,
+                        LinkedHashMap::new
+                ));
+        top2.forEach((emotion, weight) -> {
+            DiaryEmotion de = new DiaryEmotion();
+            de.setDiary(d);
+            de.setEmotion(emotion);
+            de.setWeight(weight);
+            emotionRepo.save(de);
+        });
+
+        List<CategoryEmotionItemDTO> emotionItems = Collections.emptyList();
+
+        return new DiaryResponseDTO(
+                d.getId(),
+                userId,
+                d.getForestId(),
+                top2,
+                mainEmotion,
+                weather,
+                d.getContent(),
+                emotionItems
+        );
     }
 
     // 일기 수정
