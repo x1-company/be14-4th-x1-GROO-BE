@@ -1,12 +1,10 @@
 package com.x1.groo.forest.emotion.query.repository;
 
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
+import com.x1.groo.forest.emotion.query.dto.*;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -32,6 +30,28 @@ public interface QueryForestEmotionMapper {
     );
 
     List<QueryForestEmotionDetailDTO> findForestDetail(
+            @Param("userId") int userId,
+            @Param("forestId") int forestId
+    );
+
+    List<QueryForestEmotionDiaryByDateDTO> findDiaryByDateAndForestId(
+            @Param("forestId") int forestId,
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime
+    );
+
+    List<QueryForestEmotionDiaryByMonthDTO> findDiariesByMonth(
+            @Param("forestId") int forestId,
+            @Param("startDateTime") LocalDateTime startDateTime,
+            @Param("endDateTime") LocalDateTime endDateTime
+    );
+
+    Boolean existsUserInForest(
+            @Param("userId") int userId,
+            @Param("forestId") int forestId
+    );
+
+    Boolean isOwnerOfForest(
             @Param("userId") int userId,
             @Param("forestId") int forestId
     );
