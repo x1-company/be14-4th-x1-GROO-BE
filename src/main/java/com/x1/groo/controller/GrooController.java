@@ -8,6 +8,6 @@ public class GrooController {
 
     @GetMapping("/health")
     public String health() {
-        return "I'm OK1";
+        return "I'm OK2";
     }
 }
