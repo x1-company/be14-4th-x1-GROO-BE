@@ -91,4 +91,27 @@ public class DiaryController {
         DiarySaveDetailDTO detail = diaryService.getSaveDetail(userId, diaryId);
         return ResponseEntity.ok(detail);
     }
+
+    /** 임시 저장된 일기 수정 */
+    @PutMapping("/save/{diaryId}")
+    public ResponseEntity<DiarySaveUpdateResponseDTO> updateSave(
+            @PathVariable int diaryId,
+            @RequestBody DiarySaveRequestDTO req,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        DiarySaveUpdateResponseDTO resp = diaryService.updateSave(userId, diaryId, req);
+        return ResponseEntity.ok(resp);
+    }
+
+    /** 임시 저장된 일기 삭제 */
+    @DeleteMapping("/save/{diaryId}")
+    public ResponseEntity<Void> deleteSave(
+            @PathVariable int diaryId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        diaryService.deleteSave(userId, diaryId);
+        return ResponseEntity.noContent().build();
+    }
 }
