@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
-import com.x1.groo.item.dto.CategoryEmotionItemDTO;
+
 
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
@@ -243,5 +243,46 @@ public class DiaryServiceImpl implements DiaryService {
                 d.getContent(),
                 emotionItems
         );
+    }
+
+    // 일기 수정
+    @Override
+    @Transactional
+    public DiaryUpdateResponseDTO updateDiary(DiaryUpdateRequestDTO req, int userId) {
+        int diaryId = req.getDiaryId();
+        int forestId = req.getForestId();
+        String content = req.getContent();
+
+        // 1. 일기 조회
+        Diary diary = diaryRepo.findById(diaryId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 일기입니다."));
+
+        // 2. 권한 체크
+        boolean owner = forestRepo.findById(forestId)
+                .map(f -> f.getUser().getId() == userId)
+                .orElse(false);
+        boolean shared = sharedForestRepo.existsByUserIdAndForestId(userId, forestId);
+
+        if (!(owner || shared)) {
+            throw new AccessDeniedException(
+                    String.format("사용자[%d]가 숲[%d]에 대한 쓰기 권한이 없습니다.", userId, forestId)
+            );
+        }
+
+        // 3. 내용 수정
+        diary.setContent(content);
+
+        // 4. 저장
+        diaryRepo.save(diary);
+
+        // 5. 결과 반환
+        DiaryUpdateResponseDTO res = new DiaryUpdateResponseDTO();
+        res.setDiaryId(diary.getId());
+        res.setUserId(diary.getUserId());
+        res.setForestId(diary.getForestId());
+        res.setContent(diary.getContent());
+        res.setUpdatedAt(diary.getUpdatedAt());
+
+        return res;
     }
 }
