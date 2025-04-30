@@ -3,6 +3,7 @@ package com.x1.groo.forest.emotion.query.controller;
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
+import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
@@ -90,6 +91,18 @@ public class QueryForestEmotionController {
         int userId = ((Number) jwtUtil.parseJwt(token).get("userId")).intValue();
 
         List<QueryForestEmotionDetailDTO> result = queryForestEmotionService.getForestDetail(userId, forestId);
+        return ResponseEntity.ok(result);
+    }
+
+    // 소유한 숲 조회
+    @GetMapping("/myforest")
+    public ResponseEntity<List<QueryForestEmotionListDTO>> getMyForest(
+            @RequestHeader(value = "Authorization") String authorizationHeader) {
+
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        int userId = ((Number) jwtUtil.parseJwt(token).get("userId")).intValue();
+
+        List<QueryForestEmotionListDTO> result = queryForestEmotionService.getForestList(userId);
         return ResponseEntity.ok(result);
     }
 }
