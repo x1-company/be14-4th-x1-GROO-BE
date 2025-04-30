@@ -1,10 +1,7 @@
 package com.x1.groo.forest.emotion.query.controller;
 
 import com.x1.groo.common.JwtUtil;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxListDTO;
-import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionUserItemDTO;
+import com.x1.groo.forest.emotion.query.dto.*;
 import com.x1.groo.forest.emotion.query.service.QueryForestEmotionService;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -90,5 +88,38 @@ public class QueryForestEmotionController {
 
         List<QueryForestEmotionDetailDTO> result = queryForestEmotionService.getForestDetail(userId, forestId);
         return ResponseEntity.ok(result);
+    }
+
+    /* 날짜별 일기 조회 */
+    @GetMapping("/diary/{forestId}/date")
+    public ResponseEntity<List<QueryForestEmotionDiaryByDateDTO>> getDiariesByDate(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int forestId,
+            @RequestParam LocalDate date
+    ) {
+        // JWT에서 userId 추출
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        // 서비스 호출
+        List<QueryForestEmotionDiaryByDateDTO> diaries = queryForestEmotionService.findDiaries(userId, forestId, date);
+        return ResponseEntity.ok(diaries);
+    }
+
+    /* 월별 일기 조회 */
+    @GetMapping("/diary/{forestId}/month")
+    public ResponseEntity<List<QueryForestEmotionDiaryByMonthDTO>> getDiariesByMonth(
+            @RequestHeader(value = "Authorization") String authorizationHeader,
+            @PathVariable int forestId,
+            @RequestParam int year,
+            @RequestParam int month
+    ) {
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        List<QueryForestEmotionDiaryByMonthDTO> diaries = queryForestEmotionService.findDiariesByMonth(userId, forestId, year, month);
+        return ResponseEntity.ok(diaries);
     }
 }

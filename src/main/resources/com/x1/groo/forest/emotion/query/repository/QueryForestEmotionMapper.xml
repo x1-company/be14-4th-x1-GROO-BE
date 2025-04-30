@@ -52,6 +52,18 @@
         <result property="itemImageUrl" column="item_image_url"/>
     </resultMap>
 
+    <resultMap id="DiaryWithEmotionResultMap" type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDiaryByDateDTO">
+        <id property="diaryId" column="diary_id"/>
+        <result property="content" column="content"/>
+        <result property="createdAt" column="created_at"/>
+        <collection property="emotions" ofType="string" column="diary_id" select="findEmotionsByDiaryId"/>
+    </resultMap>
+
+    <resultMap id="DiaryByMonthResultMap" type="com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDiaryByMonthDTO">
+        <id property="diaryId" column="id"/>
+        <result property="createdAt" column="created_at"/>
+    </resultMap>
+
     <select id="findUserIdByForestId" resultType="int">
         SELECT user_id
         FROM forest
@@ -125,4 +137,48 @@
           AND (f.is_public = true
             OR (f.is_public = false AND f.user_id = #{userId}));
     </select>
+
+    <select id="findDiaryByDateAndForestId" resultMap="DiaryWithEmotionResultMap">
+        SELECT DISTINCT
+            d.id AS diary_id
+                      , d.content
+                      , d.created_at
+        FROM diary d
+                 JOIN user u ON d.user_id = u.id
+                 JOIN forest f ON d.forest_id = f.id
+                 LEFT JOIN shared_forest sf ON f.id = sf.forest_id
+        WHERE f.id = #{forestId}
+          AND d.is_published = 1
+          AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
+    </select>
+
+    <select id="findDiariesByMonth" resultMap="DiaryByMonthResultMap">
+        SELECT
+            d.id
+             , d.created_at
+        FROM diary d
+        WHERE d.forest_id = #{forestId}
+          AND d.is_published = 1
+          AND d.created_at BETWEEN #{startDateTime} AND #{endDateTime}
+    </select>
+
+    <select id="isOwnerOfForest" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+        FROM forest
+        WHERE id = #{forestId} AND user_id = #{userId}
+    </select>
+
+    <select id="existsUserInForest" resultType="boolean">
+        SELECT CASE WHEN COUNT(*) > 0 THEN TRUE ELSE FALSE END
+        FROM shared_forest
+        WHERE user_id = #{userId}
+          AND forest_id = #{forestId}
+    </select>
+
+    <select id="findEmotionsByDiaryId" resultType="string">
+        SELECT emotion
+        FROM diary_emotion
+        WHERE diary_id = #{diary_id}
+    </select>
+
 </mapper>
