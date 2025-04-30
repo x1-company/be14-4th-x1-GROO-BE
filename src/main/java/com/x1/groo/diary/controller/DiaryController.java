@@ -114,4 +114,14 @@ public class DiaryController {
         diaryService.deleteSave(userId, diaryId);
         return ResponseEntity.noContent().build();
     }
+
+    /** 임시 저장된 일기 등록 */
+    @PostMapping("/save/{diaryId}/publish")
+    public ResponseEntity<DiaryResponseDTO> publishSave(
+            @PathVariable int diaryId,
+            @RequestHeader("Authorization") String authHeader
+    ) {
+        int userId = extractUserId(authHeader);
+        return ResponseEntity.ok(diaryService.publishSave(userId, diaryId));
+    }
 }
