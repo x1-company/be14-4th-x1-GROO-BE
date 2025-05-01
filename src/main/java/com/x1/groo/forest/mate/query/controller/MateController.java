@@ -70,7 +70,7 @@ public class MateController {
 
     /* 우정의 숲 상세 조회 */
     @GetMapping("/detail/{forestId}")
-    public List<MateForestDetailDTO> getForestDetail(@PathVariable int forestId) {
+    public MateForestDetailDTO getForestDetail(@PathVariable int forestId) {
 
         return mateService.getForestDetail(forestId);
     }

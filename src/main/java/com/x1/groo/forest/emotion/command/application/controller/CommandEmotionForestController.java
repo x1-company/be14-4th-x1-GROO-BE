@@ -5,15 +5,14 @@ import com.x1.groo.forest.emotion.command.application.service.CommandEmotionFore
 import com.x1.groo.forest.emotion.command.domain.vo.RequestCreateVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
-import com.x1.groo.forest.emotion.command.domain.vo.RequestPublicVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
-import com.x1.groo.forest.mate.command.domain.vo.CreateMateForestRequest;
 import io.jsonwebtoken.Claims;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/emotion-forest")
@@ -32,7 +31,7 @@ public class CommandEmotionForestController {
 
     @DeleteMapping("/placement")
     public ResponseEntity<Void> retrieveItemById(@RequestHeader(value = "Authorization") String authorizationHeader,
-                                                @RequestParam int placementId) {
+                                                 @RequestParam int placementId) {
 
         // "Bearer " 부분 제거
         String token = authorizationHeader.replace("Bearer", "").trim();
@@ -46,7 +45,7 @@ public class CommandEmotionForestController {
 
     @DeleteMapping("/placements")
     public ResponseEntity<Void> retrieveAllItems(@RequestHeader(value = "Authorization") String authorizationHeader,
-                                                @RequestParam int forestId) {
+                                                 @RequestParam int forestId) {
 
         // "Bearer " 부분 제거
         String token = authorizationHeader.replace("Bearer", "").trim();
@@ -87,8 +86,8 @@ public class CommandEmotionForestController {
     }
 
     @PostMapping("/mailbox")
-    public ResponseEntity<Void> createMailbox (@RequestHeader(value = "Authorization") String authorizationHeader,
-                                               @RequestBody RequestMailboxVO requestMailboxVO) {
+    public ResponseEntity<Void> createMailbox(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                              @RequestBody RequestMailboxVO requestMailboxVO) {
 
         // "Bearer " 부분 제거
         String token = authorizationHeader.replace("Bearer", "").trim();
@@ -101,9 +100,9 @@ public class CommandEmotionForestController {
     }
 
     @DeleteMapping("/mailbox")
-    public ResponseEntity<Void> deleteMailbox (@RequestHeader(value = "Authorization") String authorizationHeader,
-                                               @RequestParam int mailboxId,
-                                               @RequestParam int forestId) {
+    public ResponseEntity<Void> deleteMailbox(@RequestHeader(value = "Authorization") String authorizationHeader,
+                                              @RequestParam int mailboxId,
+                                              @RequestParam int forestId) {
 
         // "Bearer " 부분 제거
         String token = authorizationHeader.replace("Bearer", "").trim();
@@ -143,6 +142,22 @@ public class CommandEmotionForestController {
         commandEmotionForestService.createEmotionForest(userId, request);
 
         return ResponseEntity.ok(Map.of("message", "감정의 숲이 생성되었습니다."));
+    }
+
+    // 숲 이름 수정하기
+    @PatchMapping("/{forestId}/name")
+    public ResponseEntity<Void> updateForestName(@PathVariable int forestId,
+                                                 @RequestHeader(value = "Authorization") String authorizationHeader,
+                                                 @RequestBody Map<String, String> request) {
+        String token = authorizationHeader.replace("Bearer", "").trim();
+        Claims claims = jwtUtil.parseJwt(token);
+        int userId = ((Number) claims.get("userId")).intValue();
+
+        String newName = request.get("name");
+
+        commandEmotionForestService.updateForestName(forestId, userId, newName);
+
+        return ResponseEntity.ok().build();
     }
 
 
