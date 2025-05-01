@@ -7,20 +7,17 @@ import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
 import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
-import com.x1.groo.forest.mate.command.domain.aggregate.MateForestEntity;
-import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
 import com.x1.groo.forest.mate.command.domain.repository.BackgroundRepository;
 import jakarta.persistence.EntityNotFoundException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -88,7 +85,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     @Transactional
     @Override
     public void placeItem(int userId, RequestPlacementVO requestPlacementVO) {
-        
+
         // 1. userItem 조회 및 검증
         UserItemEntity userItem = userItemRepository.findByIdAndUserId(requestPlacementVO.getUserItemId(), userId)
                 .orElseThrow(() -> new EntityNotFoundException("아이템 정보가 일치하지 않습니다"));
@@ -194,4 +191,25 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
 
         forestRepository.save(forest);
     }
+
+    // 숲 이름 수정하기
+    @Transactional
+    @Override
+    public void updateForestName(int forestId, int userId, String newName) {
+        ForestEntity forest = forestRepository.findById(forestId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 숲입니다."));
+
+        // 공유된 숲 참여 여부 확인
+        boolean isMember = forest.getUser().getId() == userId ||
+                forestRepository.isUserInSharedForest(userId, forestId);
+
+        if (!isMember) {
+            throw new AccessDeniedException("해당 숲에 대한 수정 권한이 없습니다.");
+        }
+
+        forest.setName(newName);
+        forestRepository.save(forest);
+    }
+
+
 }

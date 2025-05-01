@@ -21,4 +21,6 @@ public interface CommandEmotionForestService {
     void updateForestPublic(int forestId, int userId);
 
     void createEmotionForest(int userId, RequestCreateVO request);
+
+    void updateForestName(int forestId, int userId, String newName);
 }
