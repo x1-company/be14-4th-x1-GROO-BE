@@ -2,7 +2,6 @@ package com.x1.groo.forest.emotion.query.controller;
 
 import com.x1.groo.common.JwtUtil;
 import com.x1.groo.forest.emotion.query.dto.*;
-import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionDetailDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionListDTO;
 import com.x1.groo.forest.emotion.query.dto.QueryForestEmotionMailboxDTO;

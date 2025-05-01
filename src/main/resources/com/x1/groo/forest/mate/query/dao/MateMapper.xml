@@ -106,8 +106,8 @@
           LEFT JOIN placement p ON p.user_item_id = ui.id
           LEFT JOIN item i ON ui.item_id = i.id
          WHERE f.id = #{forestId}
-           AND f.is_public = true
-           AND p.id IS NOT NULL;
+<!--           AND f.is_public = false-->
+<!--           AND p.id IS NOT NULL;-->
     </select>
     
     <!-- 숲에 참여한 모든 유저 닉네임 조회 -->
