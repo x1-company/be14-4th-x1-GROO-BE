@@ -13,5 +13,5 @@ public class RequestPlacementVO {
     private int forestId;
     private BigDecimal itemPositionX;
     private BigDecimal itemPositionY;
-    private int userItemId;
+    private int itemId;
 }

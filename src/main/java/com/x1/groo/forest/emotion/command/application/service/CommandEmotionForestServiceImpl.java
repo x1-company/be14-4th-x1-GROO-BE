@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -85,26 +86,44 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     @Transactional
     @Override
     public void placeItem(int userId, RequestPlacementVO requestPlacementVO) {
+        int itemId = requestPlacementVO.getItemId();
+        int forestId = requestPlacementVO.getForestId();
 
-        // 1. userItem 조회 및 검증
-        UserItemEntity userItem = userItemRepository.findByIdAndUserId(requestPlacementVO.getUserItemId(), userId)
-                .orElseThrow(() -> new EntityNotFoundException("아이템 정보가 일치하지 않습니다"));
+        // 1. 기존 userItem 조회
+        Optional<UserItemEntity> optionalUserItem = userItemRepository
+                .findByUserIdAndItemIdAndForestId(userId, itemId, forestId);
 
-        // 2. placed_count 증가
-        userItem.setPlacedCount(userItem.getPlacedCount() + 1);
+        UserItemEntity userItem;
 
-        // 3. userEntity 조회 (PlacementEntity에 필요)
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("사용자가 유효하지 않습니다"));
+        if (optionalUserItem.isPresent()) {
+            // 2-1. 이미 있다면 placed_count 증가
+            userItem = optionalUserItem.get();
+            userItem.incrementPlacedCount();
+            userItem.incrementTotalCount();
+        } else {
+            // 2-2. 없다면 새로 생성
+            UserEntity user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("사용자가 유효하지 않습니다"));
+            ForestEntity forest = forestRepository.findById(forestId)
+                    .orElseThrow(() -> new EntityNotFoundException("숲이 유효하지 않습니다"));
 
-        // 4. placement 생성 및 저장
+            userItem = new UserItemEntity();
+            userItem.setUser(user);
+            userItem.setItemId(itemId);
+            userItem.setForest(forest);
+            userItem.setTotalCount(1);
+            userItem.setPlacedCount(1);
+
+            userItemRepository.save(userItem);
+        }
+
+        // 3. placement 저장
         PlacementEntity placement = new PlacementEntity();
         placement.setPositionX(requestPlacementVO.getItemPositionX());
         placement.setPositionY(requestPlacementVO.getItemPositionY());
-        placement.setUser(user);
+        placement.setUser(userItem.getUser()); // 또는 userRepository에서 다시 가져와도 됨
         placement.setUserItem(userItem);
 
-        // 저장
         placementRepository.save(placement);
     }
 
