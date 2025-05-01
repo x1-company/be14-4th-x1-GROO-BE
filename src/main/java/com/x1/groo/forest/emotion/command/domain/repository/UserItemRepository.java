@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface UserItemRepository extends JpaRepository<UserItemEntity, Integer> {
     List<UserItemEntity> findByUserIdAndForestId(int userId, int forestId);
 
-    Optional<UserItemEntity> findByIdAndUserId(int id, int userId);
+    Optional<UserItemEntity> findByUserIdAndItemIdAndForestId(int userId, int itemId, int forestId);
 }

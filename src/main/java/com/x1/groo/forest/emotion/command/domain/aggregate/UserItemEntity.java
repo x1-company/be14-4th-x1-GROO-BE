@@ -45,4 +45,7 @@ public class UserItemEntity {
     public void incrementPlacedCount() {
         this.placedCount++;
     }
+
+    // total_count를 +1 하는 로직
+    public void incrementTotalCount() { this.totalCount++; }
 }

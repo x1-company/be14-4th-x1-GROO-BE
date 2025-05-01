@@ -19,10 +19,10 @@ public class PlacementEntity {
     @Column(name="id")
     private int id;
 
-    @Column(name="position_x")
+    @Column(name = "position_x", precision = 9, scale = 6)
     private BigDecimal positionX;
 
-    @Column(name="position_y")
+    @Column(name = "position_y", precision = 9, scale = 6)
     private BigDecimal positionY;
 
     @ManyToOne(fetch = FetchType.LAZY)
