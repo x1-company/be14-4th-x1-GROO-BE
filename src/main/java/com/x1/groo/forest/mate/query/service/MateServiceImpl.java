@@ -5,6 +5,7 @@ import com.x1.groo.forest.mate.query.dto.DiaryByDateDTO;
 import com.x1.groo.forest.mate.query.dto.DiaryByMonthDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestDetailDTO;
 import com.x1.groo.forest.mate.query.dto.MateForestResponseDTO;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -57,16 +58,20 @@ public class MateServiceImpl implements MateService {
     }
 
     @Override
-    public List<MateForestDetailDTO> getForestDetail(int forestId) {
-        List<MateForestDetailDTO> forestDetails = mateMapper.findForestDetail(forestId);
+    public MateForestDetailDTO getForestDetail(int forestId) {
+        MateForestDetailDTO forestDetails = mateMapper.findForestDetail(forestId);
+
+        if (forestDetails == null) {
+            log.error("Forest with id {} not found", forestId);
+            throw new EntityNotFoundException("해당 숲을 찾을 수 없습니다: id = " + forestId);
+        }
+
 
         List<String> nicknames = mateMapper.findNicknamesByForestId(forestId);
 
-        log.info(nicknames.toString());
-        for (MateForestDetailDTO detail : forestDetails) {
-            detail.setNicknames(nicknames);
-        }
+        forestDetails.setNicknames(nicknames);
 
+        log.info(forestDetails.toString());
         return forestDetails;
     }
 
