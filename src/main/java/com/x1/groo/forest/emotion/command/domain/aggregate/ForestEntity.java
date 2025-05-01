@@ -1,5 +1,6 @@
 package com.x1.groo.forest.emotion.command.domain.aggregate;
 
+import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -29,4 +30,8 @@ public class ForestEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="background_id")
+    private BackgroundEntity backgroundId;
 }

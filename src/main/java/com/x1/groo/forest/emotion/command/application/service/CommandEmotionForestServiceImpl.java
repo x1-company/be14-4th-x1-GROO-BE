@@ -2,10 +2,17 @@ package com.x1.groo.forest.emotion.command.application.service;
 
 import com.x1.groo.forest.emotion.command.domain.aggregate.*;
 import com.x1.groo.forest.emotion.command.domain.repository.*;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestCreateVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
+import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
+import com.x1.groo.forest.mate.command.domain.aggregate.MateForestEntity;
+import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
+import com.x1.groo.forest.mate.command.domain.repository.BackgroundRepository;
 import jakarta.persistence.EntityNotFoundException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -27,6 +34,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
     private final ForestRepository forestRepository;
     private final UserRepository userRepository;
     private final MailboxRepository mailboxRepository;
+    private final BackgroundRepository backgroundRepository;
 
     /* 단일 아이템 회수 */
     @Transactional
@@ -148,6 +156,7 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         mailboxRepository.softDeleteById(mailboxId);
     }
 
+    // 숲의 공개 여부 변경
     @Override
     public void updateForestPublic(int forestId, int userId) {
         ForestEntity forest = forestRepository.findById(forestId)
@@ -163,6 +172,26 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         forest.setPublic(!currentPublicStatus);
 
         // 숲 정보 저장
+        forestRepository.save(forest);
+    }
+
+    // 감정의 숲 생성
+    @Override
+    @Transactional
+    public void createEmotionForest(int userId, RequestCreateVO request) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        BackgroundEntity background = backgroundRepository.findById(1)
+                .orElseThrow(() -> new IllegalArgumentException("기본 배경을 찾을 수 없습니다."));
+
+        ForestEntity forest = new ForestEntity();
+        forest.setName(request.getForestName());
+        forest.setMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
+        forest.setPublic(true);
+        forest.setBackgroundId(background);
+        forest.setUser(user);
+
         forestRepository.save(forest);
     }
 }
