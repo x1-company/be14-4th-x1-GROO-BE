@@ -11,9 +11,9 @@
 
     <select id="selectAllCategories" resultMap="categoryMap">
         SELECT
-           ID
-         , CATEGORY
-        FROM CATEGORY
+           id
+         , category
+        FROM category
     </select>
 
     <resultMap id="categoryEmotionItemMap"
@@ -27,14 +27,14 @@
 
     <select id="selectItemsByCategoryAndEmotion" resultMap="categoryEmotionItemMap">
         SELECT
-            ID
-             , NAME
-             , IMAGE_URL
-             , EMOTION
-             , CATEGORY_ID
-        FROM ITEM
-        WHERE CATEGORY_ID = #{categoryId}
-          AND EMOTION = #{mainEmotion}
+               id
+             , name
+             , image_url
+             , emotion
+             , category_id
+        FROM item
+        WHERE category_id = #{categoryId}
+          AND emotion = #{mainEmotion}
         ORDER BY RAND()
             LIMIT 3
     </select>
