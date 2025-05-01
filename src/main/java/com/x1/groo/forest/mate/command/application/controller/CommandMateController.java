@@ -48,7 +48,7 @@ public class CommandMateController {
         String inviteCode = commandMateService.createInviteLink(forestId);
 
         // 초대코드를 이용해서 최종 초대링크로 감싸기
-        String inviteLink = "https://localhost:8080/mate/invite/" + inviteCode;
+        String inviteLink = "http://localhost:5173/mate/invite/" + inviteCode;
         return new CreateInviteRequest(inviteLink);
     }
 
