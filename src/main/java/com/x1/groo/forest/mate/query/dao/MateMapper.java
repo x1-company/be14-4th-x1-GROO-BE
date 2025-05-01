@@ -29,7 +29,7 @@ public interface MateMapper {
             @Param("userId") int userId
     );
 
-    List<MateForestDetailDTO> findForestDetail(
+    MateForestDetailDTO findForestDetail(
             @Param("forestId") int forestId
     );
 
