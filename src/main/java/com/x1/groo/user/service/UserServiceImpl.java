@@ -3,6 +3,8 @@ package com.x1.groo.user.service;
 import com.x1.groo.email.config.RedisUtil;
 import com.x1.groo.email.dto.EmailCheckDTO;
 import com.x1.groo.email.exception.CustomException;
+import com.x1.groo.forest.emotion.command.application.service.CommandEmotionForestService;
+import com.x1.groo.forest.emotion.command.domain.vo.RequestCreateVO;
 import com.x1.groo.security.vo.LoginResponseVO;
 import com.x1.groo.user.aggregate.Role;
 import com.x1.groo.user.aggregate.UserEntity;
@@ -26,13 +28,15 @@ public class UserServiceImpl implements UserService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final ModelMapper modelMapper;
     private final RedisUtil redisUtil;
+    private final CommandEmotionForestService forestService;
 
     public UserServiceImpl(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder,
-                           ModelMapper modelMapper, RedisUtil redisUtil) {
+                           ModelMapper modelMapper, RedisUtil redisUtil, CommandEmotionForestService forestService) {
         this.userRepository = userRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.modelMapper = modelMapper;
         this.redisUtil = redisUtil;
+        this.forestService = forestService;
     }
 
 
@@ -58,6 +62,11 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(newUser);
         redisUtil.deleteData(signupRequestVO.getEmail());
+
+        // 숲 자동 생성
+        String forestName = newUser.getNickname() + "의 숲";
+        RequestCreateVO forestReq = new RequestCreateVO(forestName);
+        forestService.createEmotionForest(newUser.getId(), forestReq);
 
         return "회원가입이 완료되었습니다.";
     }
