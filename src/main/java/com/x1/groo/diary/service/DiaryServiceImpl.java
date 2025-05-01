@@ -14,15 +14,14 @@ import com.x1.groo.item.dto.CategoryEmotionItemDTO;
 import com.x1.groo.item.service.ItemService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
-import java.util.Collections;
+
+import java.util.*;
 
 
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,6 +40,9 @@ public class DiaryServiceImpl implements DiaryService {
     public DiaryResponseDTO createDiary(DiaryRequestDTO req, int userId) {
         int forestId = req.getForestId();
         int categoryId = req.getCategoryId();
+        LocalDateTime createdAt = req.getCreatedAt();
+
+
         // 권한 체크
         boolean owner = forestRepo.findById(forestId)
                 .map(f -> f.getUser().getId() == userId)
@@ -69,7 +71,7 @@ public class DiaryServiceImpl implements DiaryService {
         diary.setUserId(userId);
         diary.setForestId(forestId);
         diary.setWeather(weather);
-        diary.setCreatedAt(LocalDateTime.now());
+        diary.setCreatedAt(createdAt);
         diary.setUpdatedAt(LocalDateTime.now());
         Diary savedDiary = diaryRepo.save(diary);
 
