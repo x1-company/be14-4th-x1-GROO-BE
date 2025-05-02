@@ -43,7 +43,7 @@ public class CommandMateServiceImpl implements CommandMateService {
         sharedForestRepository.deleteByUserIdAndForestId(userId, forestId);
 
         // 0명이 될 때 숲 삭제
-        int memberCount = sharedForestRepository.countByForestId(userId);
+        int memberCount = sharedForestRepository.countByForestId(forestId);
         if (memberCount == 0) {
             forestRepository.deleteById(forestId);
         }
