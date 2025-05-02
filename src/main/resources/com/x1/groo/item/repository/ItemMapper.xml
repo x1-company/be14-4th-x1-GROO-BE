@@ -27,7 +27,7 @@
 
     <select id="selectItemsByCategoryAndEmotion" resultMap="categoryEmotionItemMap">
         SELECT
-            id
+               id
              , name
              , image_url
              , emotion

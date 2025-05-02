@@ -48,6 +48,7 @@ public class UserItemStorageServiceImpl implements UserItemStorageService {
         if (existing != null) {
             // 보유 중이면 count + 1
             existing.setTotalCount(existing.getTotalCount() + 1);
+            existing.setPlacedCount(existing.getPlacedCount() + 1);
             userItemStorageRepo.save(existing);
         } else {
             // 보유하지 않은 경우 새로 저장
