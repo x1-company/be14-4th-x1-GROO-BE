@@ -146,9 +146,12 @@ pipeline {
 </details>
 
 ## ERD
-<summary>ERD 상세보기</summary>
+<details>
+    <summary>ERD Cloud</summary>
 <img width="1016" alt="KakaoTalk_Photo_2025-05-03-15-44-48" src="https://github.com/user-attachments/assets/d75dab37-700a-44cb-818a-0c66ac2146ea" />
-
+<details/>
+<details>
+    <summary>ERD 상세보기</summary>
 ```mermaid
 erDiagram
     user {
@@ -267,6 +270,7 @@ erDiagram
     placement }o--|| user : placed_by
     placement }o--|| user_item : uses
 ```
+<details/>
 
 # 개인 회고
 
