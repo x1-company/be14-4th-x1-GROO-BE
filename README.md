@@ -362,8 +362,8 @@ erDiagram
 <summary>감정/날씨 테이블 제거 및 구조 단순화 이유</summary>
  
  <p align="center">
-  <img src="https://github.com/user-attachments/assets/d84fdac2-b3e0-4982-b034-fade1bf7dba0" width="500"/>
-  <img src="https://github.com/user-attachments/assets/84cf1632-b4ce-45b6-bd4b-8012d2a8a274" height="340"/>
+  <img src="https://github.com/user-attachments/assets/d84fdac2-b3e0-4982-b034-fade1bf7dba0" width="400"/>
+  <img src="https://github.com/user-attachments/assets/84cf1632-b4ce-45b6-bd4b-8012d2a8a274" height="272"/>
 </p>
 <p align="center">
   <sub>왼쪽: 구조 초기 설계 | 오른쪽: 리팩토링 이후 구조</sub>
