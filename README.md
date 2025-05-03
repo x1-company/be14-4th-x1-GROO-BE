@@ -1,6 +1,6 @@
 # 🌳 Groo 
 
-## "감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"
+### __"감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"__
 
 <br><br><br>
 
@@ -31,9 +31,12 @@ Groo는 위로를 주기 위한 도구라기보다는, 스스로의 감정과 �
 
 단 한 줄의 일기라도 괜찮아요.
 그날의 감정이 하나의 나무가 되어, 당신의 정원에 자랍니다. 🌱
-# CICD
 
-## 아키텍처
+<br><br> 
+
+# 📦 CICD
+
+### 아키텍처
 
 <details>
   <summary>아키텍처 보기</summary>
@@ -42,7 +45,7 @@ Groo는 위로를 주기 위한 도구라기보다는, 스스로의 감정과 �
 
 </details>
 
-## jenkins 파이프라인 코드
+### jenkins 파이프라인 코드
 
 <details>
   <summary>코드 보기</summary>
@@ -167,7 +170,7 @@ pipeline {
 ```
 </details>
 
-## 테스트 결과
+### 테스트 결과
 
 <details>
   <summary>링크 보기</summary>
@@ -176,7 +179,11 @@ pipeline {
 
 </details>
 
-## ERD
+<br><br>
+
+# 📚 문서
+
+### ERD
 <details>
     <summary>ERD Cloud</summary>
 <img width="1016" alt="KakaoTalk_Photo_2025-05-03-15-44-48" src="https://github.com/user-attachments/assets/d75dab37-700a-44cb-818a-0c66ac2146ea" />
@@ -303,6 +310,41 @@ erDiagram
     placement }o--|| user_item : uses
 ```
 </details>
+
+
+# 🛠️ 기술 스택
+
+### FRONTEND  
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Vue.js](https://img.shields.io/badge/Vue.js-4FC08D?style=for-the-badge&logo=vue.js&logoColor=white)
+
+### BACKEND  
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring_Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Spring JPA](https://img.shields.io/badge/JPA-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=hibernate&logoColor=white)
+![MyBatis](https://img.shields.io/badge/MyBatis-B5E7A0?style=for-the-badge&logo=MyBatis&logoColor=black)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=spring-security&logoColor=white)
+![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=json-web-tokens&logoColor=white)
+
+### DB  
+![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white)
+![MyBatis](https://img.shields.io/badge/MyBatis-FFB725?style=for-the-badge&logo=MyBatis&logoColor=black)
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)
+
+### DESIGN  
+![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)
+
+### TOOL  
+![Git](https://img.shields.io/badge/Git-F05032?style=for-the-badge&logo=git&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![VS Code](https://img.shields.io/badge/VS%20Code-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
+
+
 
 # 개인 회고
 
