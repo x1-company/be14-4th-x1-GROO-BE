@@ -6,7 +6,7 @@
 
 # 🚀 Team X1 🚀
 
-| <img src="https://github.com/user-attachments/assets/c96cd9e0-dee6-4026-9086-7b2ffee3e56f" width="140"> | <img src="https://github.com/user-attachments/assets/c3df4899-1878-4180-a133-689254256ec8" width="140"> | <img src="https://github.com/user-attachments/assets/2e220b76-b0b4-4939-a277-dd1dfbf92db1" width="140"> | <img src="https://github.com/user-attachments/assets/8c603a5c-9c99-4d21-a353-e194298b1318" width="140"> | <img src="https://github.com/user-attachments/assets/47e0f3a1-b5e0-48c7-b63f-590db29cc4df" width="140"> | <img src="https://github.com/user-attachments/assets/8d5fd81a-89cb-42a1-a432-45a5ab59516c" width="140"> |
+| <img src="https://github.com/user-attachments/assets/c96cd9e0-dee6-4026-9086-7b2ffee3e56f" width="110"> | <img src="https://github.com/user-attachments/assets/c3df4899-1878-4180-a133-689254256ec8" width="110"> | <img src="https://github.com/user-attachments/assets/2e220b76-b0b4-4939-a277-dd1dfbf92db1" width="110"> | <img src="https://github.com/user-attachments/assets/8c603a5c-9c99-4d21-a353-e194298b1318" width="110"> | <img src="https://github.com/user-attachments/assets/47e0f3a1-b5e0-48c7-b63f-590db29cc4df" width="110"> | <img src="https://github.com/user-attachments/assets/8d5fd81a-89cb-42a1-a432-45a5ab59516c" width="110"> |
 | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: |
 | 황수민 | 신민경 | 이예원 | 조윤태 | 이준규 | 박지원 |
 | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/emily9949) | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/mmmv41) | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/oni128) | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/cxzaqq) | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/JK-LEE98) | [<img src="https://img.shields.io/badge/Github-Link-181717?logo=Github">](https://github.com/zi-won) |
@@ -311,6 +311,7 @@ erDiagram
 ```
 </details>
 
+<br><g4>
 
 # 🛠️ 기술 스택
 
@@ -345,6 +346,7 @@ erDiagram
 ![Notion](https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=notion&logoColor=white)
 
 
+<br><br>
 
 # 개인 회고
 
