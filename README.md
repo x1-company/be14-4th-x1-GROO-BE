@@ -15,6 +15,10 @@
 
   ![my_items](https://github.com/user-attachments/assets/ed93f004-61f2-41d3-ba1d-6b5202459d13)
 
+  ![create_invite_link](https://github.com/user-attachments/assets/344c0452-dee9-458a-8247-2ad38bf53706)
+
+  ![accept_invice_page](https://github.com/user-attachments/assets/3f2c294a-64d2-45e6-bf94-d5b41f9da074)
+
   <img width="1710" alt="image" src="https://github.com/user-attachments/assets/13c3d3ee-5e9f-4c75-9c85-758a58b908d5" />
 
 
