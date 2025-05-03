@@ -146,9 +146,8 @@ pipeline {
 </details>
 
 ## ERD
+<summary>ERD 상세보기</summary>
 <img width="1016" alt="KakaoTalk_Photo_2025-05-03-15-44-48" src="https://github.com/user-attachments/assets/d75dab37-700a-44cb-818a-0c66ac2146ea" />
-
-## ERD
 
 ```mermaid
 erDiagram
