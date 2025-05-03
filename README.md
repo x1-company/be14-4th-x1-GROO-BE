@@ -359,7 +359,7 @@ erDiagram
 
 ### 감정/날씨 관련 ERD 구조 리팩토링 
 <details>
-<summary>감정/날씨 관련 ERD 구조 리팩토링 배경</summary>
+<summary>감정/날씨 테이블 제거 및 구조 단순화 이유</summary>
  
  <p align="center">
   <img src="https://github.com/user-attachments/assets/d84fdac2-b3e0-4982-b034-fade1bf7dba0" width="500"/>
