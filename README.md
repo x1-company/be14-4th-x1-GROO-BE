@@ -152,6 +152,7 @@ pipeline {
 </details>
 <details>
     <summary>ERD 상세보기</summary>
+  
 ```mermaid
 erDiagram
     user {
