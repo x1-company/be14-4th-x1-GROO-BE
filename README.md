@@ -5,7 +5,133 @@
 
 ## 아키텍처
 
+![image](https://github.com/user-attachments/assets/1e896b25-2f05-4c7d-92f9-442e9e02ae73)
+
+
 ## jenkins 파이프라인 코드
+
+<details>
+  <summary>코드 보기</summary>
+  
+  ```groovy
+pipeline {
+    agent any
+
+    tools {
+        gradle 'gradle'
+        jdk 'openJDK17'
+    }
+
+    environment {
+        GITHUB_URL = 'https://github.com/x1-company/be14-4th-x1-GROO-BE.git'
+    }
+
+    stages {
+        stage('Preparation') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh 'docker --version'
+                    } else {
+                        bat 'docker --version'
+                    }
+                }
+            }
+        }
+
+        stage('Checkout & Inject Secrets') {
+            steps {
+                git branch: 'feature/roy/CICD', url: "${env.GITHUB_URL}"
+                withCredentials([file(credentialsId: 'x1_groo_boot-yml', variable: 'APP_YML_PATH')]) {
+                    script {
+                        if (isUnix()) {
+                            sh "mkdir -p ./src/main/resources"
+                            sh "cp $APP_YML_PATH ./src/main/resources/application.yml"
+                        } else {
+                            bat 'if not exist src\\main\\resources mkdir src\\main\\resources'
+                            bat 'copy %APP_YML_PATH% src\\main\\resources\\application.yml'
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Source Build') {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh "chmod +x ./gradlew"
+                        sh "./gradlew clean build"
+                    } else {
+                        bat "gradlew.bat clean build"
+                    }
+                }
+            }
+        }
+
+        stage('Container Build and Push') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'DOCKERHUB_PASSWORD', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        if (isUnix()) {
+                            sh "docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}"
+                            sh "docker build -t ${DOCKER_USER}/x1_groo_boot:latest ."
+                            sh "docker push ${DOCKER_USER}/x1_groo_boot:latest"
+                        } else {
+                            bat "docker login -u %DOCKER_USER% -p %DOCKER_PASS%"
+                            bat "docker build -t ${DOCKER_USER}/x1_groo_boot:latest ."
+                            bat "docker push ${DOCKER_USER}/x1_groo_boot:latest"
+                        }
+                    }
+                }
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                script {
+                    def containerName = "x1_groo_boot_container"
+                    def imageName = "cxzaqq/x1_groo_boot:latest"
+
+                    if (isUnix()) {
+                        sh "docker ps -q --filter 'name=${containerName}' | grep -q . && docker rm -f ${containerName} || echo 'No existing container to remove'"
+                        sh "docker run -d --name ${containerName} -p 8080:8080 ${imageName}"
+                    } else {
+                        bat """
+                            FOR /F %%i IN ('docker ps -q --filter "name=${containerName}"') DO docker rm -f %%i
+                            docker run -d --name ${containerName} -p 8080:8080 ${imageName}
+                            docker ps
+                            docker logs ${containerName}
+                        """
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            script {
+                // application.yml 삭제
+                if (isUnix()) {
+                    sh 'rm -f ./src/main/resources/application.yml'
+                    sh 'docker logout'
+                } else {
+                    bat 'del /F /Q src\\main\\resources\\application.yml'
+                    bat 'docker logout'
+                }
+            }
+        }
+        success {
+            echo 'Pipeline succeeded!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
+```
+</details>
 
 ## 테스트 결과
 
