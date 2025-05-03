@@ -2,6 +2,23 @@
 
 ### __"감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"__
 
+![landing_page](https://github.com/user-attachments/assets/ee94c065-fed4-437a-ac92-2ee73659e049)
+
+<details>
+  <summary>다른 화면 구경하기</summary>
+
+  ![main_page](https://github.com/user-attachments/assets/9d789434-beee-40b1-a58f-c981858fb288)
+
+  ![analyzing_page](https://github.com/user-attachments/assets/b426fde6-b09d-4415-bb14-43457a16c569)
+
+  ![analyze_page](https://github.com/user-attachments/assets/cb9fe5d1-0f4f-4df9-8ed9-3f732da18a2e)
+
+  ![my_items](https://github.com/user-attachments/assets/ed93f004-61f2-41d3-ba1d-6b5202459d13)
+
+
+</details>
+
+
 <br><br><br>
 
 # 🚀 Team X1 🚀
