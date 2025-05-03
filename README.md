@@ -267,7 +267,7 @@ erDiagram
     diary_emotion }o--|| diary : analyzed_from
     placement }o--|| user : placed_by
     placement }o--|| user_item : uses
-
+```
 
 # 개인 회고
 
