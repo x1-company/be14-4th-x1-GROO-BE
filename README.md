@@ -15,7 +15,7 @@
 
   ![my_items](https://github.com/user-attachments/assets/ed93f004-61f2-41d3-ba1d-6b5202459d13)
 
-  ![mate forest]<img width="1710" alt="image" src="https://github.com/user-attachments/assets/2c972a07-d640-4f2e-8cf6-4f9a6e07b597"/>
+  <img width="1710" alt="image" src="https://github.com/user-attachments/assets/2c972a07-d640-4f2e-8cf6-4f9a6e07b597"/>
 
 
 </details>
