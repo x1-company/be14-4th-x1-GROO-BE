@@ -1,11 +1,14 @@
 # 🌳 Groo 
 
 ### __"감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"__
+ <img src="https://github.com/user-attachments/assets/e1b01c1a-a833-413a-b72b-b7d588f6d226" width="1200">
 
 ![landing_page](https://github.com/user-attachments/assets/ee94c065-fed4-437a-ac92-2ee73659e049)
 
 <details>
   <summary>다른 화면 구경하기</summary>
+
+  <img src="https://github.com/user-attachments/assets/a76037d9-f2b6-4384-8f09-d2759c222120" width="1200">
 
   ![main_page](https://github.com/user-attachments/assets/9d789434-beee-40b1-a58f-c981858fb288)
 
