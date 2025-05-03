@@ -1,12 +1,15 @@
 # 기획 의도
 
-
 # CICD
 
 ## 아키텍처
 
-![image](https://github.com/user-attachments/assets/1e896b25-2f05-4c7d-92f9-442e9e02ae73)
+<details>
+  <summary>아키텍처 보기</summary>
 
+  ![image](https://github.com/user-attachments/assets/1e896b25-2f05-4c7d-92f9-442e9e02ae73)
+
+</details>
 
 ## jenkins 파이프라인 코드
 
@@ -135,5 +138,25 @@ pipeline {
 
 ## 테스트 결과
 
+<details>
+  <summary>링크 보기</summary>
+
+  https://ohgiraffers.notion.site/CICD-1e8649136c1180f78da6f0e62d73bb0b?pvs=73
+
+</details>
 
 # 개인 회고
+
+<details>
+  <summary>회고 보기</summary>
+
+  |이름|회고|
+  |------|---|
+  |박지원|내용|
+  |신민경|내용|
+  |이예원|내용|
+  |이준규|내용|
+  |조윤태|내용|
+  |황수민|내용|
+
+</details>
