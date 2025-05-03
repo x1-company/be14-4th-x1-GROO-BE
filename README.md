@@ -312,11 +312,22 @@ erDiagram
 </details>
 
 ### 요구사항 명세서
+
+<details>
+  <summary>요구사항 명세서 보기</summary>
+  
 <img width="817" alt="스크린샷 2025-05-04 00 06 32" src="https://github.com/user-attachments/assets/65f7a17c-c6e6-4a50-ba1e-e305a3f0be82" />
 
+</details>
+
 ### 테스트 케이스
+
+<details>
+  <summary>테스트 케이스 보기</summary>
+  
 <img width="779" alt="스크린샷 2025-05-04 00 08 24" src="https://github.com/user-attachments/assets/a7a39015-ad36-4461-a827-8ae862526fb0" />
 
+</details>
 
 <br><g4>
 
