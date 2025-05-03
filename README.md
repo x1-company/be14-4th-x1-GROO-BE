@@ -15,7 +15,8 @@
 
   ![my_items](https://github.com/user-attachments/assets/ed93f004-61f2-41d3-ba1d-6b5202459d13)
 
-  <img width="1710" alt="image" src="https://github.com/user-attachments/assets/2c972a07-d640-4f2e-8cf6-4f9a6e07b597"/>
+  <img width="1710" alt="image" src="https://github.com/user-attachments/assets/13c3d3ee-5e9f-4c75-9c85-758a58b908d5" />
+
 
 
 </details>
