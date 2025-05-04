@@ -3,7 +3,8 @@
 ### __"감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"__
  <img src="https://github.com/user-attachments/assets/e1b01c1a-a833-413a-b72b-b7d588f6d226" width="1200">
 
-![landing_page](https://github.com/user-attachments/assets/ee94c065-fed4-437a-ac92-2ee73659e049)
+<img width="1440" alt="스크린샷 2025-05-04 오후 1 41 56" src="https://github.com/user-attachments/assets/0f111712-8b0a-441e-8469-7a44cfb1c395" />
+
 
 <details>
   <summary>다른 화면 구경하기</summary>
