@@ -11,6 +11,25 @@
 
   <img src="https://github.com/user-attachments/assets/a76037d9-f2b6-4384-8f09-d2759c222120" width="1200">
 
+### 로그인 화면
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/c4547bec-ca00-4a61-9d99-c4c3d25d24a8" />
+
+### 메인 페이지
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/f17c97c9-983a-4642-9d0d-3a277a263f93" />
+
+### 감정일기 작성하기
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/0725f384-806f-4ce2-aafc-9efdaacd5118" />
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/0236bfbc-ae95-428a-8db7-82d81aa7fd17" />
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/22137aff-2bd9-444a-a7c7-5a16a5fdd4c3" />
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/e18afbdb-5d47-4120-bd34-204ce78451e2" />
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/ff812093-a6fe-487a-b474-3e55f371d4ea" />
+즐거움 -> 눈 내리는 배경으로 변경
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/fb80183a-926a-48ca-9eee-360d505bd042" />
+
+
+
+<br>
+
   ![main_page](https://github.com/user-attachments/assets/9d789434-beee-40b1-a58f-c981858fb288)
 
   ![analyzing_page](https://github.com/user-attachments/assets/b426fde6-b09d-4415-bb14-43457a16c569)
