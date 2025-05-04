@@ -3,38 +3,54 @@
 ### __"감정을 기록하고, 정원으로 표현하는 감성 다이어리 서비스"__
  <img src="https://github.com/user-attachments/assets/e1b01c1a-a833-413a-b72b-b7d588f6d226" width="1200">
 
-<img width="1440" alt="스크린샷 2025-05-04 오후 1 41 56" src="https://github.com/user-attachments/assets/0f111712-8b0a-441e-8469-7a44cfb1c395" />
+<br>
 
+## 🏡 다른 화면 구경하기 🏡 
 
 <details>
   <summary>다른 화면 구경하기</summary>
 
-  <img src="https://github.com/user-attachments/assets/a76037d9-f2b6-4384-8f09-d2759c222120" width="1200">
+### 🏝️ 랜딩 페이지
+  <img width="1440" alt="스크린샷 2025-05-04 오후 1 41 56" src="https://github.com/user-attachments/assets/0f111712-8b0a-441e-8469-7a44cfb1c395" />
 
-### 로그인 화면
+### 🌴 로그인 화면
   <img width="1440" alt="image" src="https://github.com/user-attachments/assets/c4547bec-ca00-4a61-9d99-c4c3d25d24a8" />
 
-### 메인 페이지
+### 🌿 메인 페이지
 <img width="1440" alt="image" src="https://github.com/user-attachments/assets/f17c97c9-983a-4642-9d0d-3a277a263f93" />
 
-### 감정일기 작성하기
+### ⛳️ 감정일기 작성하기
 <img width="1440" alt="image" src="https://github.com/user-attachments/assets/0725f384-806f-4ce2-aafc-9efdaacd5118" />
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/0236bfbc-ae95-428a-8db7-82d81aa7fd17" />
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/22137aff-2bd9-444a-a7c7-5a16a5fdd4c3" />
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/e18afbdb-5d47-4120-bd34-204ce78451e2" />
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/ff812093-a6fe-487a-b474-3e55f371d4ea" />
-즐거움 -> 눈 내리는 배경으로 변경
-<img width="1440" alt="image" src="https://github.com/user-attachments/assets/fb80183a-926a-48ca-9eee-360d505bd042" />
-
-
 
 <br>
 
-  ![main_page](https://github.com/user-attachments/assets/9d789434-beee-40b1-a58f-c981858fb288)
+<details>
+  <summary> 🌳 감정일기 작성하기 더보기 🌳</summary>
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/0236bfbc-ae95-428a-8db7-82d81aa7fd17" />
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/22137aff-2bd9-444a-a7c7-5a16a5fdd4c3" />
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/e18afbdb-5d47-4120-bd34-204ce78451e2" />
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/ff812093-a6fe-487a-b474-3e55f371d4ea" />  
+  
+  ☺️ 즐거움 -> 눈 내리는 배경으로 변경
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/fb80183a-926a-48ca-9eee-360d505bd042" />
 
-  ![analyzing_page](https://github.com/user-attachments/assets/b426fde6-b09d-4415-bb14-43457a16c569)
+  🌳 요약해서 보기
+  <img src="https://github.com/user-attachments/assets/a76037d9-f2b6-4384-8f09-d2759c222120" width="1200">
+</details>
 
-  ![analyze_page](https://github.com/user-attachments/assets/cb9fe5d1-0f4f-4df9-8ed9-3f732da18a2e)
+<br>
+
+### 🍀 감정일기 다시보기
+<img width="1440" alt="image" src="https://github.com/user-attachments/assets/5b2f2919-b2b0-4030-af01-72daa9366359" />
+
+<br>
+
+<details>
+  <summary> 🌳 감정일기 다시보기 더보기 🌳</summary>
+  <img width="1440" alt="image" src="https://github.com/user-attachments/assets/ce2fd785-ff9c-4488-bfd7-279de5f37b77" />
+</details>
+
+<br>
 
   ![my_items](https://github.com/user-attachments/assets/ed93f004-61f2-41d3-ba1d-6b5202459d13)
 
