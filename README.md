@@ -239,7 +239,7 @@ pipeline {
 <details>
   <summary>링크 보기</summary>
 
-  https://ohgiraffers.notion.site/CICD-1e8649136c1180f78da6f0e62d73bb0b?pvs=73
+  https://www.youtube.com/watch?v=IFBZyXVenWU
 
 </details>
 
