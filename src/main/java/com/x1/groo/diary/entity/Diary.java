@@ -12,27 +12,28 @@ import java.time.LocalDateTime;
 @Getter @Setter @NoArgsConstructor
 public class Diary {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int id;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
+    @Column(name = "content", columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(nullable = false)
+    @Column(name = "is_published", nullable = false)
     private Boolean isPublished;
 
-    @Column
+    @Column(name = "weather")
     private String weather;
 
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
 
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
     private int userId;
 
-    @Column(nullable = false)
+    @Column(name = "forest_id", nullable = false)
     private int forestId;
 
     @PreUpdate
