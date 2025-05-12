@@ -4,7 +4,7 @@ import com.x1.groo.forest.common.domain.aggregate.SharedForestEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("TempSharedForestRepository")
 public interface SharedForestRepository extends JpaRepository<SharedForestEntity, Integer> {
     boolean existsByUserIdAndForestId(int userId, int forestId);
 

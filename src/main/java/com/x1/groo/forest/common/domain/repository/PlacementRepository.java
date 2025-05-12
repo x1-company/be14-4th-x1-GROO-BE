@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
+@Repository("TempPlacementRepository")
 public interface PlacementRepository extends JpaRepository<PlacementEntity, Integer> {
     void deleteByUserItemIdIn(List<Integer> userItemIds);
 }

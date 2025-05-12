@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Repository("TempUserItemRepository")
 public interface UserItemRepository extends JpaRepository<UserItemEntity, Integer> {
 
     List<UserItemEntity> findByUserIdAndForestId(int userId, int forestId);
