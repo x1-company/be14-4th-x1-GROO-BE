@@ -1,4 +1,9 @@
 package com.x1.groo.forest.common.domain.repository;
 
-public interface DiaryEmotionRepository {
+import com.x1.groo.forest.common.domain.aggregate.DiaryEmotionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface DiaryEmotionRepository extends JpaRepository<DiaryEmotionEntity, Integer> {
 }
