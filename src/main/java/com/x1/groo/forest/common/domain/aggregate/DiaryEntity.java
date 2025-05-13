@@ -1,4 +1,4 @@
-package com.x1.groo.forest.common.domain;
+package com.x1.groo.forest.common.domain.aggregate;
 
 import jakarta.persistence.*;
 import lombok.*;
