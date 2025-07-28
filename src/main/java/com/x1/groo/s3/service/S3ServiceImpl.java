@@ -2,15 +2,14 @@ package com.x1.groo.s3.service;
 
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class S3ServiceImpl implements S3Service {
@@ -39,5 +38,25 @@ public class S3ServiceImpl implements S3Service {
 
         URL presignedUrl = amazonS3Client.generatePresignedUrl(generatePresignedUrlRequest);
         return presignedUrl.toString();
+    }
+
+    @Override
+    public List<String> getAllObjects(String prefix) {
+        List<String> objectKeys = new ArrayList<>();
+
+        ListObjectsV2Request request = new ListObjectsV2Request()
+                .withBucketName(bucketName)
+                .withPrefix(prefix);
+
+        ListObjectsV2Result result;
+
+        do {
+            result = amazonS3Client.listObjectsV2(request);
+            for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
+                objectKeys.add(objectSummary.getKey());
+            }
+        } while (result.isTruncated());
+
+        return objectKeys;
     }
 }

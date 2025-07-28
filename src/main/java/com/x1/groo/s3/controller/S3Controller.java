@@ -4,10 +4,9 @@ import com.x1.groo.s3.service.S3Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/image")
@@ -39,4 +38,10 @@ public class S3Controller {
         return ResponseEntity.ok("DB 연결 성공! 가져온 데이터: " + result);
     }
 
+    @GetMapping("/objects")
+    public ResponseEntity<?> getAllObjects(@RequestParam(required = false) String prefix) {
+        List<String> keys = s3Service.getAllObjects(prefix != null ? prefix : "");
+
+        return ResponseEntity.ok(keys);
+    }
 }
