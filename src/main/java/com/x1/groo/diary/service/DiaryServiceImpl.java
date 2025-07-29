@@ -8,13 +8,12 @@ import com.x1.groo.diary.entity.Diary;
 import com.x1.groo.diary.entity.DiaryEmotion;
 import com.x1.groo.diary.repository.DiaryEmotionRepository;
 import com.x1.groo.diary.repository.DiaryRepository;
-import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
+import com.x1.groo.forest.common.domain.repository.ForestRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.EmotionSharedForestRepository;
 import com.x1.groo.item.dto.CategoryEmotionItemDTO;
 import com.x1.groo.item.service.ItemService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 

@@ -3,7 +3,7 @@ package com.x1.groo.forest.common.domain.aggregate;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "TempBackgroundEntity")
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -15,11 +15,11 @@ public class BackgroundEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private int id;
 
-    @Column(name = "name", nullable = false, length = 50)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "image_url", nullable = false)
+    @Column(name = "image_url")
     private String imageUrl;
 }

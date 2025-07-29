@@ -1,13 +1,13 @@
 package com.x1.groo.forest.mate.command.application.service;
 
-import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
-import com.x1.groo.forest.mate.command.domain.aggregate.MateForestEntity;
-import com.x1.groo.forest.mate.command.domain.aggregate.MateUserEntity;
+import com.x1.groo.forest.common.domain.aggregate.BackgroundEntity;
+import com.x1.groo.forest.common.domain.aggregate.ForestEntity;
+import com.x1.groo.forest.common.domain.aggregate.UserEntity;
+import com.x1.groo.forest.common.domain.repository.BackgroundRepository;
+import com.x1.groo.forest.common.domain.repository.ForestRepository;
+import com.x1.groo.forest.common.domain.repository.UserRepository;
 import com.x1.groo.forest.mate.command.domain.aggregate.SharedForestEntity;
-import com.x1.groo.forest.mate.command.domain.repository.BackgroundRepository;
-import com.x1.groo.forest.mate.command.domain.repository.ForestRepository;
 import com.x1.groo.forest.mate.command.domain.repository.SharedForestRepository;
-import com.x1.groo.forest.mate.command.domain.repository.UserRepository;
 import com.x1.groo.forest.mate.command.domain.vo.CreateMateForestRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -114,20 +114,20 @@ public class CommandMateServiceImpl implements CommandMateService {
     @Override
     @Transactional
     public void createMateForest(int userId, CreateMateForestRequest request) {
-        MateUserEntity user = userRepository.findById(userId)
+        UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
         BackgroundEntity background = backgroundRepository.findById(1)
                 .orElseThrow(() -> new IllegalArgumentException("기본 배경을 찾을 수 없습니다."));
 
-        MateForestEntity forest = new MateForestEntity();
+        ForestEntity forest = new ForestEntity();
         forest.setName(request.getForestName());
         forest.setMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
-        forest.setPublic(true);
+        forest.setIsPublic(true);
         forest.setBackground(background);
         forest.setUser(user);
 
-        MateForestEntity savedForest = forestRepository.save(forest);
+        ForestEntity savedForest = forestRepository.save(forest);
 
         SharedForestEntity sharedForest = new SharedForestEntity();
         sharedForest.setUserId(user.getId());

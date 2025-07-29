@@ -1,7 +1,6 @@
 package com.x1.groo.item.service;
 
-import com.x1.groo.forest.emotion.command.domain.aggregate.ForestEntity;
-import com.x1.groo.forest.emotion.command.domain.repository.ForestRepository;
+import com.x1.groo.forest.common.domain.repository.ForestRepository;
 import com.x1.groo.forest.emotion.command.domain.repository.EmotionSharedForestRepository;
 import com.x1.groo.item.domain.storage.aggregate.UserItemStorageEntity;
 import com.x1.groo.item.domain.storage.repository.UserItemStorageRepository;
@@ -12,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserItemStorageServiceImpl implements UserItemStorageService {
 
-    private UserItemStorageRepository userItemStorageRepo;
-    private ForestRepository forestRepo;
-    private EmotionSharedForestRepository sharedForestRepo;
+    private final UserItemStorageRepository userItemStorageRepo;
+    private final ForestRepository forestRepo;
+    private final EmotionSharedForestRepository sharedForestRepo;
 
     @Autowired
     public UserItemStorageServiceImpl(UserItemStorageRepository userItemStorageRepository,
