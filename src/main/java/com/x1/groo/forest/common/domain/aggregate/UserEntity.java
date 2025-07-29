@@ -5,7 +5,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity(name = "TempUserEntity")
+@Entity(name = "ForestUserEntity")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

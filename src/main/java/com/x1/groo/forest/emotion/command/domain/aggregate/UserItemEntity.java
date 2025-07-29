@@ -1,5 +1,7 @@
 package com.x1.groo.forest.emotion.command.domain.aggregate;
 
+import com.x1.groo.forest.common.domain.aggregate.ForestEntity;
+import com.x1.groo.forest.common.domain.aggregate.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

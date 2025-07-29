@@ -3,7 +3,7 @@ package com.x1.groo.forest.common.domain.aggregate;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity(name = "TempForestEntity")
+@Entity(name = "ForestEntity")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

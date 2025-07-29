@@ -1,13 +1,17 @@
 package com.x1.groo.forest.emotion.command.application.service;
 
+import com.x1.groo.forest.common.domain.aggregate.BackgroundEntity;
+import com.x1.groo.forest.common.domain.aggregate.ForestEntity;
+import com.x1.groo.forest.common.domain.aggregate.UserEntity;
+import com.x1.groo.forest.common.domain.repository.BackgroundRepository;
+import com.x1.groo.forest.common.domain.repository.ForestRepository;
+import com.x1.groo.forest.common.domain.repository.UserRepository;
 import com.x1.groo.forest.emotion.command.domain.aggregate.*;
 import com.x1.groo.forest.emotion.command.domain.repository.*;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestCreateVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestMailboxVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestPlacementVO;
 import com.x1.groo.forest.emotion.command.domain.vo.RequestReplacementVO;
-import com.x1.groo.forest.mate.command.domain.aggregate.BackgroundEntity;
-import com.x1.groo.forest.mate.command.domain.repository.BackgroundRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -184,8 +188,8 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         }
 
         // 숲의 공개 여부 토글 (true -> false, false -> true)
-        boolean currentPublicStatus = forest.isPublic();
-        forest.setPublic(!currentPublicStatus);
+        boolean currentPublicStatus = forest.getIsPublic();
+        forest.setIsPublic(!currentPublicStatus);
 
         // 숲 정보 저장
         forestRepository.save(forest);
@@ -204,8 +208,8 @@ public class CommandEmotionForestServiceImpl implements CommandEmotionForestServ
         ForestEntity forest = new ForestEntity();
         forest.setName(request.getForestName());
         forest.setMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM")));
-        forest.setPublic(true);
-        forest.setBackgroundId(background);
+        forest.setIsPublic(true);
+        forest.setBackground(background);
         forest.setUser(user);
 
         forestRepository.save(forest);
